@@ -1,0 +1,370 @@
+---
+title: "Business Transformation for Cloud"
+author: Issac Chan, Eva Wang, and Bean Du
+format:
+  html:
+    theme: united
+    toc: true
+    toc-location: left
+    toc-depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment = "")
+```
+
+# Business Transformation for Cloud
+
+In general, we recommend Cloud conduct vertical integration from dispensary operations to production. This is not an easy transformation and we would love to support Cloud during this process. As we mentioned in the presentation, there are many risks that Cloud should pay attention to and we would love to help them.
+
+For this project, what we learned is two-folded. From the technical perspective, we practiced linear optimization, process simulation, and cost simulation. We revisited the need to adjust units in bvec and Amat for linear optimization. For process simulation, we learned the use of at() in add_generator to make the process start at 0 and act for 1 time. And for the final ROI, we learned about the triangle distribution and how to use it to generate random variables.
+
+On the business side, the project gives us a peak into how to use analytics to solve business problems and how to gather business insight from analytics. For example, the code for Stocking Shelves is straightforward, but the business interpretation needs some more thinking. Pre-rolls have the lowest price and lowest demand, yet our code suggests us to invest predominantly in pre-rolls. As we think back to what we coded, this result is restricted by both the budget and market demand. Thus, the results show a combined effect of contribution margin and the market demand, which makes pre-rolls our top choice. Despite the low-demand, pre-rolls have the second highest contribution margin at $7/unit. Perhaps, with more marketing, the demand for pre-rolls could rise.
+
+***
+
+# Codes
+
+The Cloud Cannabis Company (Cloud) operates 4 dispensaries within Michigan, with a 5th opening soon in Detroit. Like most business in this space, they are faced with intense competition and an ever-growing consumer base.
+
+## Stocking Shelves
+
+Across the 4 current locations, Cloud offers product categories such as flower, pre-rolls, concentrates, and edibles. 
+
+For each of these products, average prices (retail), costs (Cloud's acquisition cost), and demand  are listed below:
+
+```{r}
+data.frame(product = c("flower (3.5 grams)", "pre-rolls (1 gram)", 
+                       "concentrates (1 gram)", "edibles (100 mg)"), 
+           price = c(45, 12, 60, 15), 
+           cost = c(25, 5, 50, 10), 
+           demand = c(37, 15, 20, 28)) |>
+  flextable::flextable(cwidth = 2.5, cheight = .15)
+```
+
+Demand is an approximation of the percentage of sales for each product type. 
+¬
+Cloud's annual product budget is 850,000 dollars. Given the demand needs, how should Cloud allocate their budget over the product types to maximize revenue?
+
+```{r}
+cvec <- c('flower' = 45,
+          'pre-rolls' = 12,
+          'concentrates' = 60,
+          'edibles' = 15)
+bvec <- c(850000, 850000*.37, 850000*.15, 850000*.20, 850000*.28)  #needs to be the same unit
+Amat <- rbind(c(25, 5, 50, 10),
+              c(25, 0, 0, 0),
+              c(0, 5, 0, 0),
+              c(0, 0, 50, 0),
+              c(0, 0, 0, 10))
+product_strategy <- linprog::solveLP(cvec, bvec, Amat, TRUE, c('<=', rep('==', 4)), lpSolve = TRUE)
+product_strategy
+
+prop.table(product_strategy$solution)
+
+```
+
+```{r}
+
+library(ggplot2)
+
+product <- data.frame(Category = c('Flower', 'Pre-rolls', 'Concentrates', 'Edibles'),
+                      Quantity = c(12580, 25500, 3400, 23800))
+
+ggplot(product, aes(x = Category, y = Quantity)) +
+  geom_col() +
+  theme_minimal() +
+  geom_text(aes(label = Quantity), vjust = -0.5) +
+  theme(axis.title.x = element_text(size = 14), 
+      axis.title.y = element_text(size = 14),   
+      panel.grid.major.y = element_line(color = "whitesmoke"),
+      panel.grid.minor.y = element_line(color = "whitesmoke"),
+      panel.grid.major.x = element_line(color = "whitesmoke"),
+      panel.grid.minor.x = element_line(color = "whitesmoke"))  +
+  ylim(0, 30000)
+```
+
+## Moving Product
+
+Currently, Cloud receives products from the following companies: Better Provisioning (Kalamazoo), Harbor Farmz (Kalamazoo), Hazy Farms (Detroit), and Rare Michigan Genetics (Kalamazoo). Due to different locations, each company has slightly different flat shipping rates to each of the 4 current locations:
+
+```{r, results='asis'}
+data.frame(company = c(rep("Better Provisioning", 4), 
+                       rep("Harbor Farmz", 4), 
+                       rep("Hazy Farms", 4), 
+                       rep("Rare Michigan Genetics", 4)), 
+           store = rep(c("Ann Arbor", "Muskegon", "Utica", "Traverse City"), 4), 
+           cost = c(10, 8, 12, 20, 
+                    10, 8, 12, 20, 
+                    5, 10, 5, 25,
+                    10, 8, 12, 20)) |>
+  flextable::flextable(cwidth = 2.5, cheight = .15)
+```
+
+In addition to the shipping costs to each location, each store has needed flower product and each grower only has so much product. Those values are listed below:
+
+```{r}
+data.frame(company = c("Better Provisioning", "Harbor Farmz",  
+                       "Hazy Farms", "Rare Michigan Genetics"),  
+           supply = c(700, 300, 550, 420), 
+           store = c("Ann Arbor", "Muskegon", "Utica", "Traverse City"), 
+           demand = c(650, 200, 450, 250)) |>
+  flextable::flextable(cwidth = 2.5, cheight = .15)
+```
+
+```{r}
+library(DiagrammeR)
+
+cost <- c(costA_E = 10,
+          costA_F = 8,
+          costA_G = 12,
+          costA_H = 20,
+          costB_E = 10,
+          costB_F = 8,
+          costB_G = 12,
+          costB_H = 20,
+          costC_E = 5,
+          costC_F = 10,
+          costC_G = 5,
+          costC_H = 25,
+          costD_E = 10,
+          costD_F = 8,
+          costD_G = 12,
+          costD_H = 20)
+  
+supply_demand <- c(700, 300, 550, 420, 650, 200, 450, 250)
+
+
+supply_chain <- rbind(nodeA = c(1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                      nodeB = c(0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0),
+                      nodeC = c(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0),
+                      nodeD = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1),
+                      nodeE = c(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),
+                      nodeF = c(0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0),
+                      nodeG = c(0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0),
+                      nodeH = c(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+
+  
+con_dir <- c(rep("<=", 4), rep(">=", 4))
+
+result <- linprog::solveLP(cvec = cost, bvec = supply_demand, Amat = supply_chain, const.dir = con_dir, maximum = FALSE)
+
+result$opt
+result$solution[result$solution!= 0]
+
+grViz("
+digraph {
+  graph [overlap = true, fontsize = 5, rankdir = LR]
+
+  node [shape = box,
+        fontname = Helvetica]
+  A; B; C; D
+
+  node [shape = oval,
+        fixedsize = true,
+        width = 1.5] // sets as oval
+  E; F; G; H
+  
+  node [shape = box, style = filled, color = black, fillcolor = aliceblue]
+  A [label = 'Better Provisioning']
+  B [label = 'Harbor Farmz']
+  C [label = 'Hazy Farms']
+  D [label = 'Rare Michigan Genetics']
+  E [label = 'Ann Arbor']
+  F [label = 'Muskegon']
+  G [label = 'Utica']
+  H [label = 'Traverse City']
+
+  A->E [label = '550']
+  B->H [label = '250']
+  C->E [label = '100']
+  C->G [label = '450']
+  D->F [label = '200']
+}
+")
+```
+
+
+## From Sales to Scales
+
+As with most dispensaries, Cloud is contemplating a leap into the production space. Unfortunately, it is not without a fair amount of risk. The risk is not about money (although the automation involved is costly), but about time. Generally, the following products get created from a plant: flower and concentrates. 
+
+From start to finish, the process to produce flower is as follows:
+
+1. Flowering stage (min: 8 weeks; max: 11 weeks)
+
+2. Drying stage (min: 7 days; max: 10 days)
+
+3. Trimming stage (mu = 1 hour; sigma = 15 minutes)
+
+4. Curing stage (min: 1 month; max: 4 months)
+
+From start to finish, the process to produce concentrates is as follows:
+
+1. Flowering stage (min: 8 weeks; max: 11 weeks)
+
+2. Drying stage (min: 7 days; max: 10 days)
+
+3. Freeze stage (20 minutes)
+
+4. Extraction stage (mu: 15 minutes; sigma: 2 minutes)
+
+5. Filtration stage (mu: 1 hour; sigma: 8 minutes)
+
+6. Solvent evaporation stage (1 hour)
+
+7. Decarbonization stage (mu: 2 days; sigma: 8 hours)
+
+8. Distillation stage (mu: 18 hours; sigma 2 hours)
+
+About 45% of a given grow goes toward flower, while the remaining 55% goes towards concentrates. How long should Cloud anticipate a first grow taking?
+
+```{r}
+library(simmer)
+
+# time unit in hours: 1d = 24h, 1w = 168h (7*24), 1mos = 720h (30*24, assume 30 days per month)
+x <- purrr::map_df(1:1000, ~{
+production <- trajectory("produce") %>% 
+    seize("flowering") %>% 
+    timeout(function() runif(1, 8*168, 11*168)) %>% 
+    release("flowering") %>% 
+    seize("drying") %>% 
+    timeout(function() runif(1, 7*24, 10*24)) %>% 
+    release("drying") %>% 
+    branch(function() sample(1:2, 1, prob = c(0.45, 0.55)), continue = c(TRUE, TRUE),
+          trajectory() %>% 
+            seize("trimming") %>% 
+            timeout(function() rnorm(1, 1, 15/60)) %>% 
+            release("trimming") %>% 
+            seize("curing") %>% 
+            timeout(function() runif(1, 720, 4*720)) %>% 
+            release("curing"),
+          trajectory() %>%  
+            seize("freeze") %>% 
+            timeout(function() runif(1, 20/60, 20/60)) %>% 
+            release("freeze") %>% 
+            seize("extraction") %>% 
+            timeout(function() rnorm(1, 15/60, 2/60)) %>% 
+            release("extraction") %>% 
+            seize("filtration") %>% 
+            timeout(function() rnorm(1, 1, 8/60)) %>% 
+            release("filtration") %>% 
+            seize("solvent") %>% 
+            timeout(function() runif(1, 1, 1)) %>% 
+            release("solvent") %>% 
+            seize("decarbonization") %>% 
+            timeout(function() rnorm(1, 2*24, 8)) %>% 
+            release("decarbonization") %>% 
+            seize("distillation") %>% 
+            timeout(function() rnorm(1, 18, 2)) %>% 
+            release("distillation")
+        )
+
+results <- simmer("results") %>% 
+  add_resource("flowering", capacity = 1, queue_size = Inf) %>% 
+  add_resource("drying", capacity = 1, queue_size = Inf) %>% 
+  add_resource("trimming", capacity = 1, queue_size = Inf) %>% 
+  add_resource("curing", capacity = 1, queue_size = Inf) %>% 
+  add_resource("freeze", capacity = 1, queue_size = Inf) %>% 
+  add_resource("extraction", capacity = 1, queue_size = Inf) %>% 
+  add_resource("filtration", capacity = 1, queue_size = Inf) %>% 
+  add_resource("solvent", capacity = 1, queue_size = Inf) %>% 
+  add_resource("decarbonization", capacity = 1, queue_size = Inf) %>% 
+  add_resource("distillation", capacity = 1, queue_size = Inf) %>% 
+  add_generator("output_", production, at(0)) #start at 0 and get 1 case
+
+simmer::run(results)
+
+output <- get_mon_arrivals(results)
+
+output})
+
+mean(x$activity_time)   # answer in hours
+
+```
+
+
+## Return On Investment
+
+The cost to start plant production is high. The following table offers a break down of some yearly costs for a 10,000 square foot greenhouse:
+
+```{r}
+data.frame(item = c("Rent", "Lighting", "Climate Control", 
+                    "Irrigation", "Consumables"),  
+           low = c(100000, 5000, 10000, 2500, 25000), 
+           mid = c(150000, 10000, 15000, 3000, 50000), 
+           high = c(300000, 20000, 17000, 5000, 75000)) |>
+  flextable::flextable(cwidth = 2.5, cheight = .15)
+```
+
+A high-functioning greenhouse can churn out an average of 1,400 pounds of dried product per year. However, a great number of things can happen: power failures, pests, poor yield. While the average might be 1,400 pounds, there is some variance around that (roughly 300 pounds as a standard deviation). If 1,400 pounds will return a gross profit of 1,000,000 dollars, how much would Cloud likely make over the next 5 years?  
+
+```{r, message=FALSE}
+library(EnvStats)  # for triangle distribution
+library(dplyr)
+library(doParallel)
+library(foreach)
+library(furrr)
+library(future)
+library(gganimate)
+library(ggplot2)
+library(purrr)
+library(rvest)
+library(simmer)
+```
+
+
+```{r, warning=FALSE}
+data <- data.frame(item = c("Rent", "Lighting", "Climate Control", 
+                    "Irrigation", "Consumables"),  
+           low = c(100000, 5000, 10000, 2500, 25000), 
+           mid = c(150000, 10000, 15000, 3000, 50000), 
+           high = c(300000, 20000, 17000, 5000, 75000))
+
+# To get the unit price: 
+# if we assume high-cost investment will generate high-functioning greenhouse and thus
+# yield on average 1400 pounds of output, then we can use this to calculate the unit
+# price
+# 
+# high_cost <- sum(data$high)
+unit_price <- 1000000/1400
+ 
+plan(multisession, workers = parallel::detectCores() - 1)
+
+five_year_stats <-future_map_dfr(1:100000, ~{
+# total cost based on triangle distribution
+  summary_statistics <- purrr::map_df(1:5, ~{
+    rent <- rtri(1, data[1, 2], data[1,4], data[1,3]) # we don't know mode, thus use mid to be the mode
+    lighting <- rtri(1, data[2,2], data[2,4], data[2,3])
+    climate <- rtri(1, data[3,2], data[3,4], data[3,3])
+    irrigation <- rtri(1, data[4,2], data[4,4], data[4,3])
+    consumable <- rtri(1, data[5,2], data[5,4], data[5,3])
+    
+    cost <- rent + lighting + climate + irrigation + consumable
+    
+    # Output
+    output <- rnorm(1, 1400, 300)
+    
+    # Assume that our client will not change their unit price, regardless of their investment
+    
+    # Profit  
+    revenue <- output * unit_price
+    
+    profit <- as.numeric(revenue - cost)
+    
+    data.frame(Year = seq(1,5),
+               Cost = cost,
+               Revenue = revenue,
+               Profit = profit,
+               ROI = profit/cost)
+  })
+  
+  data.frame(Total_Cost = sum(summary_statistics$Cost),
+             Total_Revenue = sum(summary_statistics$Revenue),
+             Total_Profit = sum(summary_statistics$Profit),
+             ROI = sum(summary_statistics$Profit)/sum(summary_statistics$Cost))
+})
+
+summary(five_year_stats)
+plan("default")
+```

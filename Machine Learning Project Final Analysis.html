@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Issac Chan, Lance Yuan, and Eva Wang">
+
+<title>Asteroid Data Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="Machine Learning Project Final Analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Machine Learning Project Final Analysis_files/libs/quarto-html/quarto.js"></script>
+<script src="Machine Learning Project Final Analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="Machine Learning Project Final Analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Machine Learning Project Final Analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Machine Learning Project Final Analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Machine Learning Project Final Analysis_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Machine Learning Project Final Analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Machine Learning Project Final Analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Machine Learning Project Final Analysis_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-overview" id="toc-data-overview" class="nav-link active" data-scroll-target="#data-overview">Data Overview</a>
+  <ul class="collapse">
+  <li><a href="#variable-list" id="toc-variable-list" class="nav-link" data-scroll-target="#variable-list">Variable list</a></li>
+  </ul></li>
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning">Data Cleaning</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
+  <li><a href="#data-partition" id="toc-data-partition" class="nav-link" data-scroll-target="#data-partition">Data Partition</a></li>
+  <li><a href="#trees" id="toc-trees" class="nav-link" data-scroll-target="#trees">Trees</a>
+  <ul class="collapse">
+  <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest">Random Forest</a></li>
+  <li><a href="#xgboost" id="toc-xgboost" class="nav-link" data-scroll-target="#xgboost">XGBoost</a>
+  <ul class="collapse">
+  <li><a href="#convert-data" id="toc-convert-data" class="nav-link" data-scroll-target="#convert-data">Convert Data</a></li>
+  <li><a href="#fit-xgboost-model" id="toc-fit-xgboost-model" class="nav-link" data-scroll-target="#fit-xgboost-model">Fit XGBoost Model</a></li>
+  <li><a href="#imbalanced-data" id="toc-imbalanced-data" class="nav-link" data-scroll-target="#imbalanced-data">Imbalanced Data</a></li>
+  <li><a href="#variable-importance" id="toc-variable-importance" class="nav-link" data-scroll-target="#variable-importance">Variable Importance</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#logistic-regression" id="toc-logistic-regression" class="nav-link" data-scroll-target="#logistic-regression">Logistic Regression</a>
+  <ul class="collapse">
+  <li><a href="#fitting-logistic-regression" id="toc-fitting-logistic-regression" class="nav-link" data-scroll-target="#fitting-logistic-regression">Fitting Logistic Regression</a></li>
+  <li><a href="#apply-lasso" id="toc-apply-lasso" class="nav-link" data-scroll-target="#apply-lasso">Apply LASSO</a></li>
+  <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation">Model Evaluation</a></li>
+  </ul></li>
+  <li><a href="#neural-network-model" id="toc-neural-network-model" class="nav-link" data-scroll-target="#neural-network-model">Neural Network Model</a>
+  <ul class="collapse">
+  <li><a href="#standardization" id="toc-standardization" class="nav-link" data-scroll-target="#standardization">Standardization</a></li>
+  <li><a href="#neural-network-model-creation" id="toc-neural-network-model-creation" class="nav-link" data-scroll-target="#neural-network-model-creation">Neural Network Model Creation</a></li>
+  </ul></li>
+  <li><a href="#model-comparison" id="toc-model-comparison" class="nav-link" data-scroll-target="#model-comparison">Model Comparison</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Asteroid Data Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Issac Chan, Lance Yuan, and Eva Wang </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>total_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'nasa.csv'</span>, <span class="at">header =</span> T, <span class="at">stringsAsFactors =</span> T)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Library Everything</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape) </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggcorrplot)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(splitstackshape) </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xgboost)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(OptimalCutpoints) </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggforce)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(neuralnet)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotmo)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"a_insights_shap_functions.r"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="data-overview" class="level1">
+<h1>Data Overview</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(total_data, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Neo.Reference.ID    Name Absolute.Magnitude Est.Dia.in.KM.min.
+1          3703080 3703080               21.6        0.127219878
+2          3723955 3723955               21.3        0.146067964
+3          2446862 2446862               20.3        0.231502122
+4          3092506 3092506               27.4        0.008801465
+5          3514799 3514799               21.6        0.127219878
+  Est.Dia.in.KM.max. Est.Dia.in.M.min. Est.Dia.in.M.max. Est.Dia.in.Miles.min.
+1         0.28447230        127.219879         284.47230           0.079050743
+2         0.32661790        146.067964         326.61790           0.090762397
+3         0.51765448        231.502122         517.65448           0.143848705
+4         0.01968067          8.801465          19.68067           0.005468975
+5         0.28447230        127.219879         284.47230           0.079050743
+  Est.Dia.in.Miles.max. Est.Dia.in.Feet.min. Est.Dia.in.Feet.max.
+1             0.1767628             417.3881            933.30809
+2             0.2029509             479.2256           1071.58106
+3             0.3216555             759.5214           1698.34153
+4             0.0122290              28.8762             64.56914
+5             0.1767628             417.3881            933.30809
+  Close.Approach.Date Epoch.Date.Close.Approach Relative.Velocity.km.per.sec
+1          1995-01-01              788947200000                     6.115834
+2          1995-01-01              788947200000                    18.113985
+3          1995-01-08              789552000000                     7.590711
+4          1995-01-15              790156800000                    11.173874
+5          1995-01-15              790156800000                     9.840831
+  Relative.Velocity.km.per.hr Miles.per.hour Miss.Dist..Astronomical.
+1                    22017.00       13680.51               0.41948253
+2                    65210.35       40519.17               0.38301446
+3                    27326.56       16979.66               0.05095602
+4                    40225.95       24994.84               0.28532233
+5                    35426.99       22012.95               0.40783217
+  Miss.Dist..lunar. Miss.Dist..kilometers. Miss.Dist..miles. Orbiting.Body
+1         163.17871               62753692          38993336         Earth
+2         148.99263               57298148          35603420         Earth
+3          19.82189                7622912           4736658         Earth
+4         110.99039               42683616          26522368         Earth
+5         158.64671               61010824          37910368         Earth
+  Orbit.ID Orbit.Determination.Date Orbit.Uncertainity
+1       17      2017-04-06 08:36:37                  5
+2       21      2017-04-06 08:32:49                  3
+3       22      2017-04-06 09:20:19                  0
+4        7      2017-04-06 09:15:49                  6
+5       25      2017-04-06 08:57:58                  1
+  Minimum.Orbit.Intersection Jupiter.Tisserand.Invariant Epoch.Osculation
+1                  0.0252819                       4.634          2458000
+2                  0.1869350                       5.457          2458000
+3                  0.0430579                       4.557          2458000
+4                  0.0055118                       5.093          2458000
+5                  0.0347980                       5.154          2458000
+  Eccentricity Semi.Major.Axis Inclination Asc.Node.Longitude Orbital.Period
+1    0.4255491        1.407011    6.025981          314.37391       609.5998
+2    0.3516743        1.107776   28.412996          136.71724       425.8693
+3    0.3482483        1.458824    4.237961          259.47598       643.5802
+4    0.2165783        1.255903    7.905894           57.17327       514.0821
+5    0.2104479        1.225615   16.793382           84.62931       495.5978
+  Perihelion.Distance Perihelion.Arg Aphelion.Dist Perihelion.Time Mean.Anomaly
+1           0.8082589       57.25747      2.005764         2458162    264.83753
+2           0.7181996      313.09197      1.497352         2457795    173.74111
+3           0.9507910      248.41504      1.966857         2458120    292.89365
+4           0.9839016       18.70770      1.527904         2457902     68.74101
+5           0.9676866      158.26360      1.483543         2457814    135.14213
+  Mean.Motion Equinox Hazardous
+1   0.5905514   J2000      True
+2   0.8453298   J2000     False
+3   0.5593708   J2000      True
+4   0.7002772   J2000     False
+5   0.7263954   J2000      True</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(total_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   4687 obs. of  40 variables:
+ $ Neo.Reference.ID            : int  3703080 3723955 2446862 3092506 3514799 3671135 2495323 2153315 2162463 2306383 ...
+ $ Name                        : int  3703080 3723955 2446862 3092506 3514799 3671135 2495323 2153315 2162463 2306383 ...
+ $ Absolute.Magnitude          : num  21.6 21.3 20.3 27.4 21.6 19.6 19.6 19.2 17.8 21.5 ...
+ $ Est.Dia.in.KM.min.          : num  0.1272 0.1461 0.2315 0.0088 0.1272 ...
+ $ Est.Dia.in.KM.max.          : num  0.2845 0.3266 0.5177 0.0197 0.2845 ...
+ $ Est.Dia.in.M.min.           : num  127.2 146.1 231.5 8.8 127.2 ...
+ $ Est.Dia.in.M.max.           : num  284.5 326.6 517.7 19.7 284.5 ...
+ $ Est.Dia.in.Miles.min.       : num  0.07905 0.09076 0.14385 0.00547 0.07905 ...
+ $ Est.Dia.in.Miles.max.       : num  0.1768 0.203 0.3217 0.0122 0.1768 ...
+ $ Est.Dia.in.Feet.min.        : num  417.4 479.2 759.5 28.9 417.4 ...
+ $ Est.Dia.in.Feet.max.        : num  933.3 1071.6 1698.3 64.6 933.3 ...
+ $ Close.Approach.Date         : Factor w/ 777 levels "1995-01-01","1995-01-08",..: 1 1 2 3 3 3 3 4 4 4 ...
+ $ Epoch.Date.Close.Approach   : num  7.89e+11 7.89e+11 7.90e+11 7.90e+11 7.90e+11 ...
+ $ Relative.Velocity.km.per.sec: num  6.12 18.11 7.59 11.17 9.84 ...
+ $ Relative.Velocity.km.per.hr : num  22017 65210 27327 40226 35427 ...
+ $ Miles.per.hour              : num  13681 40519 16980 24995 22013 ...
+ $ Miss.Dist..Astronomical.    : num  0.419 0.383 0.051 0.285 0.408 ...
+ $ Miss.Dist..lunar.           : num  163.2 149 19.8 111 158.6 ...
+ $ Miss.Dist..kilometers.      : num  62753692 57298148 7622912 42683616 61010824 ...
+ $ Miss.Dist..miles.           : num  38993336 35603420 4736658 26522368 37910368 ...
+ $ Orbiting.Body               : Factor w/ 1 level "Earth": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Orbit.ID                    : int  17 21 22 7 25 40 43 22 100 30 ...
+ $ Orbit.Determination.Date    : Factor w/ 2680 levels "2014-06-13 15:20:44",..: 535 433 1911 1762 1191 2353 2400 2135 2300 2037 ...
+ $ Orbit.Uncertainity          : int  5 3 0 6 1 1 1 0 0 0 ...
+ $ Minimum.Orbit.Intersection  : num  0.02528 0.18693 0.04306 0.00551 0.0348 ...
+ $ Jupiter.Tisserand.Invariant : num  4.63 5.46 4.56 5.09 5.15 ...
+ $ Epoch.Osculation            : num  2458000 2458000 2458000 2458000 2458000 ...
+ $ Eccentricity                : num  0.426 0.352 0.348 0.217 0.21 ...
+ $ Semi.Major.Axis             : num  1.41 1.11 1.46 1.26 1.23 ...
+ $ Inclination                 : num  6.03 28.41 4.24 7.91 16.79 ...
+ $ Asc.Node.Longitude          : num  314.4 136.7 259.5 57.2 84.6 ...
+ $ Orbital.Period              : num  610 426 644 514 496 ...
+ $ Perihelion.Distance         : num  0.808 0.718 0.951 0.984 0.968 ...
+ $ Perihelion.Arg              : num  57.3 313.1 248.4 18.7 158.3 ...
+ $ Aphelion.Dist               : num  2.01 1.5 1.97 1.53 1.48 ...
+ $ Perihelion.Time             : num  2458162 2457795 2458120 2457902 2457814 ...
+ $ Mean.Anomaly                : num  264.8 173.7 292.9 68.7 135.1 ...
+ $ Mean.Motion                 : num  0.591 0.845 0.559 0.7 0.726 ...
+ $ Equinox                     : Factor w/ 1 level "J2000": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Hazardous                   : Factor w/ 2 levels "False","True": 2 1 2 1 2 1 1 1 1 2 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(total_data) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4687   40</code></pre>
+</div>
+</div>
+<section id="variable-list" class="level2">
+<h2 class="anchored" data-anchor-id="variable-list">Variable list</h2>
+<ol type="1">
+<li><code>Neo.Reference.ID</code> - the reference ID assigned to an asteroid</li>
+<li><code>Name</code> - the name given to an asteroid</li>
+<li><code>Absolute.Magnitude</code> - the visual magnitude of an asteroid at zero phase angle and at unit heliocentric and geocentric distances</li>
+<li><code>Est.Dia.in.KM.min.</code> - the estimated minimum diameter of the asteroid in kilometers (KM)</li>
+<li><code>Est.Dia.in.KM.max.</code> - the estimated maximum diameter of the asteroid in kilometers (KM)<br>
+</li>
+<li><code>Est.Dia.in.M.min.</code> - the estimated minimum diameter of the asteroid in meters (M)<br>
+</li>
+<li><code>Est.Dia.in.M.max.</code> - the estimated maximum diameter of the asteroid in meters (M)</li>
+<li><code>Est.Dia.in.Miles.min.</code> - the estimated minimum diameter of the asteroid in miles<br>
+</li>
+<li><code>Est.Dia.in.Miles.max.</code> - the estimated maximum diameter of the asteroid in miles</li>
+<li><code>Est.Dia.in.Feet.min.</code> - the estimated minimum diameter of the asteroid in feet<br>
+</li>
+<li><code>Est.Dia.in.Feet.max.</code> - the estimated maximum diameter of the asteroid in miles<br>
+</li>
+<li><code>Close.Approach.Date</code> - the date of when the asteroid will be near Earth<br>
+</li>
+<li><code>Epoch.Date.Close.Approach</code> - the reference of time of when the asteroid will be near Earth</li>
+<li><code>Relative.Velocity.km.per.sec</code> - the relative velocity of the asteroid in kilometer per second</li>
+<li><code>Relative.Velocity.km.per.hr</code> - the relative velocity of the asteroid in kilometer per hour</li>
+<li><code>Miles.per.hour</code> - the velocity of the asteroid in kilometer per hour<br>
+</li>
+<li><code>Miss.Dist..Astronomical.</code> - the miss distance (measure proximity) of the asteroid in astronomical unit<br>
+</li>
+<li><code>Miss.Dist..lunar.</code> - the miss distance (measure proximity) of the asteroid in lunar distance<br>
+</li>
+<li><code>Miss.Dist..kilometers.</code> - the miss distance (measure proximity) of the asteroid in kilometers<br>
+</li>
+<li><code>Miss.Dist..miles.</code> - the miss distance (measure proximity) of the asteroid in miles<br>
+</li>
+<li><code>Orbiting.Body</code> - the planet around which the asteroid is revolving<br>
+</li>
+<li><code>Orbit.ID</code> - the ID for the orbit<br>
+</li>
+<li><code>Orbit.Determination.Date</code> - the date when the orbit is determined/found<br>
+</li>
+<li><code>Orbit.Uncertainity</code> - the uncertainty of the orbit<br>
+</li>
+<li><code>Minimum.Orbit.Intersection</code> - the potential close approaches and collision risks between astronomical objects<br>
+</li>
+<li><code>Jupiter.Tisserand.Invariant</code> - distinguish different kinds of orbits</li>
+<li><code>Epoch.Osculation</code> - the orbit that is calculated from the position and velocity vectors at a particular instant of time (i.e., epoch)<br>
+</li>
+<li><code>Eccentricity</code> - a measure of how far from circular each orbit is: the smaller the eccentricity number, the more circular the realm<br>
+</li>
+<li><code>Semi.Major.Axis</code> - the value of the longest diameter (i.e., the Semi Major Axis) of the asteroid’s orbit<br>
+</li>
+<li><code>Inclination</code> - the angle between the orbit plane and the ecliptic plane<br>
+</li>
+<li><code>Asc.Node.Longitude</code> - the angle in the ecliptic plane between the inertial-frame x-axis and the line through the ascending node.<br>
+</li>
+<li><code>Orbital.Period</code> - the time taken by the asteroid to make one full revolution around its orbiting body</li>
+<li><code>Perihelion.Distance</code> - the distance of the asteroid’s closest point to the Sun<br>
+</li>
+<li><code>Perihelion.Arg</code> - the angle in the orbit plane between the ascending node and the perihelion point</li>
+<li><code>Aphelion.Dist</code> - the distance of the asteroid’s farthest point to the Sun<br>
+</li>
+<li><code>Perihelion.Time</code> - the length of time to complete Perihelion (unit unknown)<br>
+</li>
+<li><code>Mean.Anomaly</code> - the mean of the angles in the orbit plane between the perihelion point and the position of the orbiting object<br>
+</li>
+<li><code>Mean.Motion</code> - the angular speed required for a body to complete one orbit<br>
+</li>
+<li><code>Equinox</code> - the moment in time when the Sun crosses the asteroid’s equator<br>
+</li>
+<li><code>Hazardous</code> - whether the asteroid is hazardous or not</li>
+</ol>
+</section>
+</section>
+<section id="data-cleaning" class="level1">
+<h1>Data Cleaning</h1>
+<p>Just based on the description/definition of each variable, some of them are identical and some captures the same value but in different units. For the sake of our analysis, we will drop those repeated columns:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Neo.Reference.ID and Name are identical</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(total_data<span class="sc">$</span>Neo.Reference.ID <span class="sc">==</span> total_data<span class="sc">$</span>Name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p><code>Neo.Reference.ID</code> and <code>Name</code> are identical columns, so <code>Name</code> will be kept. <code>Est.Dia.in.KM.min.</code>, <code>Est.Dia.in.M.min.</code>, <code>Est.Dia.in.Miles.min.</code>, <code>Est.Dia.in.Feet.min.</code> are the same value in different units. Same for the max. For the sake of our analysis, we will only use <code>Est.Dia.in.KM.min.</code> and <code>Est.Dia.in.KM.max.</code>. To maintain consistency in units, we will use <code>Relative.Velocity.km.per.hr</code>. For Miss.Dist., we will only use <code>Miss.Dist..Astronomical.</code>. Also, <code>Equinox</code> only has one value J2000 and <code>Orbiting.Body</code> only has Earth which probably are not good predictors. Since our data captures the status of 4687 asteroids at an Epoch (i.e., at a certain time), <code>Close.Approach.Date</code> and <code>Orbit.Determination.Date</code> may not be good reference for our current time frame and thus will be removed</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>nasa_data <span class="ot">&lt;-</span> total_data[, <span class="sc">-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">18</span><span class="sc">:</span><span class="dv">21</span>, <span class="dv">23</span>, <span class="dv">39</span>)]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Points</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(nasa_data) <span class="co"># no NAs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Absolute.Magnitude Est.Dia.in.KM.min.  Est.Dia.in.KM.max.
+ Min.   :11.16      Min.   : 0.001011   Min.   : 0.00226  
+ 1st Qu.:20.10      1st Qu.: 0.033462   1st Qu.: 0.07482  
+ Median :21.90      Median : 0.110804   Median : 0.24777  
+ Mean   :22.27      Mean   : 0.204604   Mean   : 0.45751  
+ 3rd Qu.:24.50      3rd Qu.: 0.253837   3rd Qu.: 0.56760  
+ Max.   :32.10      Max.   :15.579552   Max.   :34.83694  
+ Epoch.Date.Close.Approach Relative.Velocity.km.per.hr Miles.per.hour   
+ Min.   :7.889e+11         Min.   :  1208              Min.   :  750.5  
+ 1st Qu.:1.016e+12         1st Qu.: 30358              1st Qu.:18863.5  
+ Median :1.203e+12         Median : 46504              Median :28896.0  
+ Mean   :1.180e+12         Mean   : 50295              Mean   :31251.3  
+ 3rd Qu.:1.356e+12         3rd Qu.: 65080              3rd Qu.:40437.9  
+ Max.   :1.473e+12         Max.   :160681              Max.   :99841.2  
+ Miss.Dist..Astronomical.    Orbit.ID     Orbit.Uncertainity
+ Min.   :0.0001779        Min.   :  1.0   Min.   :0.000     
+ 1st Qu.:0.1334196        1st Qu.:  9.0   1st Qu.:0.000     
+ Median :0.2650286        Median : 16.0   Median :3.000     
+ Mean   :0.2567782        Mean   : 28.3   Mean   :3.517     
+ 3rd Qu.:0.3841541        3rd Qu.: 31.0   3rd Qu.:6.000     
+ Max.   :0.4998841        Max.   :611.0   Max.   :9.000     
+ Minimum.Orbit.Intersection Jupiter.Tisserand.Invariant Epoch.Osculation 
+ Min.   :0.0000021          Min.   :2.196               Min.   :2450164  
+ 1st Qu.:0.0145851          1st Qu.:4.050               1st Qu.:2458000  
+ Median :0.0473655          Median :5.071               Median :2458000  
+ Mean   :0.0823201          Mean   :5.056               Mean   :2457724  
+ 3rd Qu.:0.1235935          3rd Qu.:6.019               3rd Qu.:2458000  
+ Max.   :0.4778910          Max.   :9.025               Max.   :2458020  
+  Eccentricity      Semi.Major.Axis   Inclination       Asc.Node.Longitude
+ Min.   :0.007522   Min.   :0.6159   Min.   : 0.01451   Min.   :  0.0019  
+ 1st Qu.:0.240858   1st Qu.:1.0006   1st Qu.: 4.96234   1st Qu.: 83.0812  
+ Median :0.372450   Median :1.2410   Median :10.31184   Median :172.6254  
+ Mean   :0.382569   Mean   :1.4003   Mean   :13.37384   Mean   :172.1573  
+ 3rd Qu.:0.512411   3rd Qu.:1.6784   3rd Qu.:19.51168   3rd Qu.:255.0269  
+ Max.   :0.960261   Max.   :5.0720   Max.   :75.40667   Max.   :359.9059  
+ Orbital.Period   Perihelion.Distance Perihelion.Arg     Aphelion.Dist   
+ Min.   : 176.6   Min.   :0.08074     Min.   :  0.0069   Min.   :0.8038  
+ 1st Qu.: 365.6   1st Qu.:0.63083     1st Qu.: 95.6259   1st Qu.:1.2661  
+ Median : 504.9   Median :0.83315     Median :189.7616   Median :1.6182  
+ Mean   : 635.6   Mean   :0.81338     Mean   :183.9322   Mean   :1.9871  
+ 3rd Qu.: 794.2   3rd Qu.:0.99723     3rd Qu.:271.7776   3rd Qu.:2.4512  
+ Max.   :4172.2   Max.   :1.29983     Max.   :359.9931   Max.   :8.9839  
+ Perihelion.Time    Mean.Anomaly       Mean.Motion      Hazardous   
+ Min.   :2450100   Min.   :  0.0032   Min.   :0.08628   False:3932  
+ 1st Qu.:2457815   1st Qu.: 87.0069   1st Qu.:0.45329   True : 755  
+ Median :2457973   Median :185.7189   Median :0.71295               
+ Mean   :2457728   Mean   :181.1679   Mean   :0.73824               
+ 3rd Qu.:2458108   3rd Qu.:276.5319   3rd Qu.:0.98467               
+ Max.   :2458839   Max.   :359.9180   Max.   :2.03900               </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nasa_data) <span class="co"># correct data format</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   4687 obs. of  24 variables:
+ $ Absolute.Magnitude         : num  21.6 21.3 20.3 27.4 21.6 19.6 19.6 19.2 17.8 21.5 ...
+ $ Est.Dia.in.KM.min.         : num  0.1272 0.1461 0.2315 0.0088 0.1272 ...
+ $ Est.Dia.in.KM.max.         : num  0.2845 0.3266 0.5177 0.0197 0.2845 ...
+ $ Epoch.Date.Close.Approach  : num  7.89e+11 7.89e+11 7.90e+11 7.90e+11 7.90e+11 ...
+ $ Relative.Velocity.km.per.hr: num  22017 65210 27327 40226 35427 ...
+ $ Miles.per.hour             : num  13681 40519 16980 24995 22013 ...
+ $ Miss.Dist..Astronomical.   : num  0.419 0.383 0.051 0.285 0.408 ...
+ $ Orbit.ID                   : int  17 21 22 7 25 40 43 22 100 30 ...
+ $ Orbit.Uncertainity         : int  5 3 0 6 1 1 1 0 0 0 ...
+ $ Minimum.Orbit.Intersection : num  0.02528 0.18693 0.04306 0.00551 0.0348 ...
+ $ Jupiter.Tisserand.Invariant: num  4.63 5.46 4.56 5.09 5.15 ...
+ $ Epoch.Osculation           : num  2458000 2458000 2458000 2458000 2458000 ...
+ $ Eccentricity               : num  0.426 0.352 0.348 0.217 0.21 ...
+ $ Semi.Major.Axis            : num  1.41 1.11 1.46 1.26 1.23 ...
+ $ Inclination                : num  6.03 28.41 4.24 7.91 16.79 ...
+ $ Asc.Node.Longitude         : num  314.4 136.7 259.5 57.2 84.6 ...
+ $ Orbital.Period             : num  610 426 644 514 496 ...
+ $ Perihelion.Distance        : num  0.808 0.718 0.951 0.984 0.968 ...
+ $ Perihelion.Arg             : num  57.3 313.1 248.4 18.7 158.3 ...
+ $ Aphelion.Dist              : num  2.01 1.5 1.97 1.53 1.48 ...
+ $ Perihelion.Time            : num  2458162 2457795 2458120 2457902 2457814 ...
+ $ Mean.Anomaly               : num  264.8 173.7 292.9 68.7 135.1 ...
+ $ Mean.Motion                : num  0.591 0.845 0.559 0.7 0.726 ...
+ $ Hazardous                  : Factor w/ 2 levels "False","True": 2 1 2 1 2 1 1 1 1 2 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(<span class="fu">unique</span>(nasa_data)) <span class="sc">==</span> <span class="fu">nrow</span>(nasa_data) <span class="co"># no replicates</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>We will set <code>Hazardous</code> as our response variable and there are 755 cases of hazardous and 3932 cases of non-hazardous, which is imbalanced data</p>
+</section>
+<section id="visualization" class="level1">
+<h1>Visualization</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imbalanced Response Variable</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nasa_data, <span class="fu">aes</span>(<span class="at">x =</span> Hazardous)) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()<span class="sc">+</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">15</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Machine-Learning-Project-Final-Analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" style="width:200.0%"></p>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot all variables</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>m_dat <span class="ot">&lt;-</span> <span class="fu">melt</span>(nasa_data, <span class="at">id.vars =</span> <span class="st">"Hazardous"</span>) </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(m_dat, <span class="fu">aes</span>( <span class="at">y =</span> value, <span class="at">x =</span> <span class="fu">factor</span>(Hazardous), <span class="at">fill =</span> <span class="fu">factor</span>(Hazardous))) <span class="sc">+</span> </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> variable, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span> </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">15</span>)) <span class="sc">+</span> </span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Hazardous"</span>, <span class="at">title =</span> <span class="st">"Hazardous or not"</span>, <span class="at">fill =</span> <span class="st">"Hazardous"</span>) <span class="sc">+</span> </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"True"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"False"</span> <span class="ot">=</span> <span class="st">"blue"</span>), </span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"True"</span> <span class="ot">=</span> <span class="st">"Hazardous"</span>, <span class="st">"False"</span> <span class="ot">=</span> <span class="st">"Not Hazardous"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Machine-Learning-Project-Final-Analysis_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid" style="width:200.0%"></p>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation matrix</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>nasa_corr <span class="ot">&lt;-</span> <span class="fu">cor</span>(nasa_data[,<span class="sc">-</span><span class="dv">24</span>])</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcorrplot</span>(nasa_corr, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">'square'</span>),<span class="at">hc.order =</span> <span class="cn">TRUE</span>, <span class="at">type =</span> <span class="st">"lower"</span>, <span class="at">outline.color =</span> <span class="st">'white'</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>),</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">15</span>)) <span class="sc">+</span> </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">title =</span> <span class="st">"Correlation Matrix"</span>, <span class="at">y =</span> <span class="st">""</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Machine-Learning-Project-Final-Analysis_files/figure-html/unnamed-chunk-5-3.png" class="img-fluid" style="width:200.0%"></p>
+</div>
+</div>
+</section>
+<section id="data-partition" class="level1">
+<h1>Data Partition</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">set.seed</span>(<span class="dv">123456</span>) </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform stratified sampling</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a> split_data <span class="ot">&lt;-</span> <span class="fu">stratified</span>(nasa_data, </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">group =</span> <span class="st">"Hazardous"</span>, </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">size =</span> <span class="fl">0.2</span>,  <span class="co"># set for test </span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">bothSets =</span> <span class="cn">TRUE</span> ) </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a> <span class="co"># Extract train data</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a> train_data <span class="ot">&lt;-</span> split_data[[<span class="dv">2</span>]]</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a> <span class="co"># Extract test data</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a> test_data <span class="ot">&lt;-</span> split_data[[<span class="dv">1</span>]]</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Check size</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(train_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3750</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(test_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 937</code></pre>
+</div>
+</div>
+</section>
+<section id="trees" class="level1">
+<h1>Trees</h1>
+<section id="random-forest" class="level2">
+<h2 class="anchored" data-anchor-id="random-forest">Random Forest</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>rf1 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Hazardous <span class="sc">~</span>., </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> train_data,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">ntree =</span> <span class="dv">200</span>, <span class="co"># Set number of trees</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">nodesize =</span> <span class="dv">200</span>)  <span class="co"># Set node size</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>rf1_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf1, test_data) <span class="co"># Create predictions </span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>t_rf <span class="ot">&lt;-</span> <span class="fu">table</span>(rf1_pred,test_data<span class="sc">$</span>Hazardous) <span class="co"># Create table</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>rf_acc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(t_rf,  <span class="at">positive =</span> <span class="st">"True"</span>) <span class="co"># Produce confusion matrix</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>rf_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+        
+rf1_pred False True
+   False   784    3
+   True      2  148
+                                          
+               Accuracy : 0.9947          
+                 95% CI : (0.9876, 0.9983)
+    No Information Rate : 0.8388          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.9802          
+                                          
+ Mcnemar's Test P-Value : 1               
+                                          
+            Sensitivity : 0.9801          
+            Specificity : 0.9975          
+         Pos Pred Value : 0.9867          
+         Neg Pred Value : 0.9962          
+             Prevalence : 0.1612          
+         Detection Rate : 0.1580          
+   Detection Prevalence : 0.1601          
+      Balanced Accuracy : 0.9888          
+                                          
+       'Positive' Class : True            
+                                          </code></pre>
+</div>
+</div>
+<p>Random Forest generates very high accuracy at 99.47%, sensitivity at 98.01% and specificity at 99.75%.</p>
+</section>
+<section id="xgboost" class="level2">
+<h2 class="anchored" data-anchor-id="xgboost">XGBoost</h2>
+<section id="convert-data" class="level3">
+<h3 class="anchored" data-anchor-id="convert-data">Convert Data</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create training matrix</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>dtrain <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(<span class="at">data =</span> <span class="fu">as.matrix</span>(train_data[, <span class="dv">1</span><span class="sc">:</span><span class="dv">23</span>]), <span class="at">label =</span> <span class="fu">as.numeric</span>(train_data<span class="sc">$</span>Hazardous) <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create test matrix</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>dtest <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(<span class="at">data =</span> <span class="fu">as.matrix</span>(test_data[, <span class="dv">1</span><span class="sc">:</span><span class="dv">23</span>]), <span class="at">label =</span> <span class="fu">as.numeric</span>(test_data<span class="sc">$</span>Hazardous) <span class="sc">-</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fit-xgboost-model" class="level3">
+<h3 class="anchored" data-anchor-id="fit-xgboost-model">Fit XGBoost Model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>bst_1 <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(<span class="at">data =</span> dtrain, <span class="co"># Set training data</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">nrounds =</span> <span class="dv">100</span>, <span class="co"># Set number of rounds</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">verbose =</span> <span class="dv">1</span>, <span class="co"># 1 - Prints out fit</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">print_every_n =</span> <span class="dv">20</span>, <span class="co"># Prints out result every 20th iteration</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">objective =</span> <span class="st">"binary:logistic"</span>, <span class="co"># Set objective</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">eval_metric =</span> <span class="st">"auc"</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">eval_metric =</span> <span class="st">"error"</span>) <span class="co"># Set evaluation metric to use</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] train-auc:0.999828  train-error:0.001600 
+[21]    train-auc:1.000000  train-error:0.000267 
+[41]    train-auc:1.000000  train-error:0.000000 
+[61]    train-auc:1.000000  train-error:0.000000 
+[81]    train-auc:1.000000  train-error:0.000000 
+[100]   train-auc:1.000000  train-error:0.000000 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>boost_preds_1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(bst_1, dtest) <span class="co"># Create predictions for xgboost model</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>pred_dat <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(boost_preds_1 , test_data<span class="sc">$</span>Hazardous) <span class="co"># Issue</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert predictions to classes, using optimal cut-off</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>boost_pred_class <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"False"</span>, <span class="fu">length</span>(boost_preds_1))</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>boost_pred_class[boost_preds_1 <span class="sc">&gt;=</span> <span class="fl">0.5</span>] <span class="ot">&lt;-</span> <span class="st">"True"</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>t_xgb <span class="ot">&lt;-</span> <span class="fu">table</span>(boost_pred_class, test_data<span class="sc">$</span>Hazardous) <span class="co"># Create table</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>xgb_acc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(t_xgb, <span class="at">positive =</span> <span class="st">"True"</span>) <span class="co"># Produce confusion matrix</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>xgb_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                
+boost_pred_class False True
+           False   784    2
+           True      2  149
+                                          
+               Accuracy : 0.9957          
+                 95% CI : (0.9891, 0.9988)
+    No Information Rate : 0.8388          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.9842          
+                                          
+ Mcnemar's Test P-Value : 1               
+                                          
+            Sensitivity : 0.9868          
+            Specificity : 0.9975          
+         Pos Pred Value : 0.9868          
+         Neg Pred Value : 0.9975          
+             Prevalence : 0.1612          
+         Detection Rate : 0.1590          
+   Detection Prevalence : 0.1612          
+      Balanced Accuracy : 0.9921          
+                                          
+       'Positive' Class : True            
+                                          </code></pre>
+</div>
+</div>
+<p>XGBoost generates accuracy at 99.57%, sensitivity at 98.68% and specificity at 99.75%.</p>
+</section>
+<section id="imbalanced-data" class="level3">
+<h3 class="anchored" data-anchor-id="imbalanced-data">Imbalanced Data</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(train_data<span class="sc">$</span>Hazardous) <span class="co"># Imbalanced Data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>False  True 
+ 3146   604 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>zero_weight <span class="ot">&lt;-</span> <span class="fu">sum</span>(train_data<span class="sc">$</span>Hazardous <span class="sc">==</span> <span class="st">'False'</span>)<span class="sc">/</span><span class="fu">sum</span>(train_data<span class="sc">$</span>Hazardous <span class="sc">==</span> <span class="st">'True'</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>bst_bal <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(<span class="at">data =</span> dtrain, <span class="co"># Set training data</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">eta =</span> <span class="fl">0.05</span>, <span class="co"># Set learning rate</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">max.depth =</span>  <span class="dv">7</span>, <span class="co"># Set max depth</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">min_child_weight =</span> <span class="dv">10</span>, <span class="co"># Set minimum number of samples in node to split</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">gamma =</span> <span class="dv">0</span>, <span class="co"># Set minimum loss reduction for split</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">subsample =</span>  <span class="fl">0.9</span>, <span class="co"># Set proportion of training data to use in tree</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">colsample_bytree =</span> <span class="fl">0.9</span>, <span class="co"># Set number of variables to use in each tree</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">nrounds =</span> <span class="dv">200</span>, <span class="co"># Set number of rounds</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">early_stopping_rounds =</span> <span class="dv">20</span>, <span class="co"># Set number of rounds to stop at if there is no improvement</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">verbose =</span> <span class="dv">1</span>, <span class="co"># 1 - Prints out fit</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">nthread =</span> <span class="dv">1</span>, <span class="co"># Set number of parallel threads</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">print_every_n =</span> <span class="dv">20</span>, <span class="co"># Prints out result every 20th iteration</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>              <span class="at">scale_pos_weight =</span> zero_weight, <span class="co"># Set weights</span></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>              <span class="at">objective =</span> <span class="st">"binary:logistic"</span>, <span class="co"># Set objective</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>              <span class="at">eval_metric =</span> <span class="st">"auc"</span>,</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">eval_metric =</span> <span class="st">"error"</span>) <span class="co"># Set evaluation metric to use</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] train-auc:0.998960  train-error:0.008800 
+Multiple eval metrics are present. Will use train_error for early stopping.
+Will train until train_error hasn't improved in 20 rounds.
+
+[21]    train-auc:0.999908  train-error:0.008267 
+Stopping. Best iteration:
+[10]    train-auc:0.999854  train-error:0.008000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>boost_preds_bal <span class="ot">&lt;-</span> <span class="fu">predict</span>(bst_bal, dtest) <span class="co"># Create predictions for xgboost model</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>pred_dat <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(boost_preds_bal , test_data<span class="sc">$</span>Hazardous) <span class="co"># Issue</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert predictions to classes, using optimal cut-off</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>boost_pred_class <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"False"</span>, <span class="fu">length</span>(boost_preds_bal))</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>boost_pred_class[boost_preds_bal <span class="sc">&gt;=</span> <span class="fl">0.5</span>] <span class="ot">&lt;-</span> <span class="st">"True"</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>t_xgb_bal <span class="ot">&lt;-</span> <span class="fu">table</span>(boost_pred_class, test_data<span class="sc">$</span>Hazardous) <span class="co"># Create table</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>xgb_ba_acc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(t_xgb_bal, <span class="at">positive =</span> <span class="st">"True"</span>) <span class="co"># Produce confusion matrix</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>xgb_ba_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                
+boost_pred_class False True
+           False   779    1
+           True      7  150
+                                          
+               Accuracy : 0.9915          
+                 95% CI : (0.9832, 0.9963)
+    No Information Rate : 0.8388          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.9689          
+                                          
+ Mcnemar's Test P-Value : 0.0771          
+                                          
+            Sensitivity : 0.9934          
+            Specificity : 0.9911          
+         Pos Pred Value : 0.9554          
+         Neg Pred Value : 0.9987          
+             Prevalence : 0.1612          
+         Detection Rate : 0.1601          
+   Detection Prevalence : 0.1676          
+      Balanced Accuracy : 0.9922          
+                                          
+       'Positive' Class : True            
+                                          </code></pre>
+</div>
+</div>
+<p>After adjusted the model for imbalanced data, the accuracy is at 99.15%, sensitivity at 99.34% and specificity at 99.11%., which doesn’t differ too much.</p>
+</section>
+<section id="variable-importance" class="level3">
+<h3 class="anchored" data-anchor-id="variable-importance">Variable Importance</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>x_vars <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Hazardous <span class="sc">~</span>., <span class="at">data =</span> train_data)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>shap_result <span class="ot">&lt;-</span> <span class="fu">shap.score.rank</span>(<span class="at">xgb_model =</span> bst_1, </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">X_train =</span>x_vars,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">shap_approx =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>make SHAP score by decreasing order</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>shap_long <span class="ot">=</span> <span class="fu">shap.prep</span>(<span class="at">shap =</span> shap_result,</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">X_train =</span> x_vars, </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">top_n =</span> <span class="dv">10</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.shap.summary</span>(<span class="at">data_long =</span> shap_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Machine-Learning-Project-Final-Analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+<p>Based on Shap calculation, <code>Absolute.Magnitude</code> and <code>Minimum.Orbit.Intersection</code> are quite important features. Let’s try remove those two and run XGBoost again.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set data again</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>dtrain1 <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(<span class="at">data =</span> <span class="fu">as.matrix</span>(train_data[, <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">23</span>)]), </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">label =</span> <span class="fu">as.numeric</span>(train_data<span class="sc">$</span>Hazardous) <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>dtest1 <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(<span class="at">data =</span> <span class="fu">as.matrix</span>(test_data[, <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">23</span>)]), </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">label =</span> <span class="fu">as.numeric</span>(test_data<span class="sc">$</span>Hazardous) <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Run Model</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>bst_2 <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(<span class="at">data =</span> dtrain1, <span class="co"># Set training data</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">nrounds =</span> <span class="dv">100</span>, <span class="co"># Set number of rounds</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">verbose =</span> <span class="dv">1</span>, <span class="co"># 1 - Prints out fit</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">print_every_n =</span> <span class="dv">20</span>, <span class="co"># Prints out result every 20th iteration</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">objective =</span> <span class="st">"binary:logistic"</span>, <span class="co"># Set objective</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">eval_metric =</span> <span class="st">"auc"</span>,</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">eval_metric =</span> <span class="st">"error"</span>) <span class="co"># Set evaluation metric to use</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] train-auc:0.928551  train-error:0.093333 
+[21]    train-auc:0.996641  train-error:0.028533 
+[41]    train-auc:0.999971  train-error:0.004000 
+[61]    train-auc:1.000000  train-error:0.000000 
+[81]    train-auc:1.000000  train-error:0.000000 
+[100]   train-auc:1.000000  train-error:0.000000 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>boost_preds_2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(bst_2, dtest1) <span class="co"># Create predictions for xgboost model</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>pred_dat <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(boost_preds_2 , test_data<span class="sc">$</span>Hazardous) <span class="co"># Issue</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert predictions to classes, using optimal cut-off</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>boost_pred_class <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"False"</span>, <span class="fu">length</span>(boost_preds_2))</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>boost_pred_class[boost_preds_2 <span class="sc">&gt;=</span> <span class="fl">0.5</span>] <span class="ot">&lt;-</span> <span class="st">"True"</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>t_xgb_2 <span class="ot">&lt;-</span> <span class="fu">table</span>(boost_pred_class, test_data<span class="sc">$</span>Hazardous) <span class="co"># Create table</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(t_xgb_2, <span class="at">positive =</span> <span class="st">"True"</span>) <span class="co"># Produce confusion matrix</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                
+boost_pred_class False True
+           False   773   41
+           True     13  110
+                                          
+               Accuracy : 0.9424          
+                 95% CI : (0.9255, 0.9564)
+    No Information Rate : 0.8388          
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+                                          
+                  Kappa : 0.7696          
+                                          
+ Mcnemar's Test P-Value : 0.0002386       
+                                          
+            Sensitivity : 0.7285          
+            Specificity : 0.9835          
+         Pos Pred Value : 0.8943          
+         Neg Pred Value : 0.9496          
+             Prevalence : 0.1612          
+         Detection Rate : 0.1174          
+   Detection Prevalence : 0.1313          
+      Balanced Accuracy : 0.8560          
+                                          
+       'Positive' Class : True            
+                                          </code></pre>
+</div>
+</div>
+<p>Now, <code>bst_2</code> gives us the accuracy at 94.24%, sensitivity at 72.85% and specificity at 98.35%.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>shap_result <span class="ot">&lt;-</span> <span class="fu">shap.score.rank</span>(<span class="at">xgb_model =</span> bst_2, </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">X_train =</span><span class="fu">as.matrix</span>(train_data[, <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">23</span>)]),</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">shap_approx =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>make SHAP score by decreasing order</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>shap_long <span class="ot">=</span> <span class="fu">shap.prep</span>(<span class="at">shap =</span> shap_result,</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">X_train =</span> <span class="fu">as.matrix</span>(train_data[, <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">23</span>)]), </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">top_n =</span> <span class="dv">10</span>)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.shap.summary</span>(<span class="at">data_long =</span> shap_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Machine-Learning-Project-Final-Analysis_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="logistic-regression" class="level1">
+<h1>Logistic Regression</h1>
+<section id="fitting-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="fitting-logistic-regression">Fitting Logistic Regression</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>glm_full <span class="ot">&lt;-</span> <span class="fu">glm</span>(Hazardous <span class="sc">~</span> ., <span class="at">data =</span> train_data, <span class="at">family =</span> <span class="st">'binomial'</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Selection Using BIC Standard</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>glm_bwd <span class="ot">&lt;-</span> <span class="fu">step</span>(glm_full, <span class="at">direction =</span> <span class="st">'backward'</span>, <span class="at">k =</span> <span class="fu">log</span>(<span class="fu">nrow</span>(nasa_data)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=949.59
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Relative.Velocity.km.per.hr + 
+    Miles.per.hour + Miss.Dist..Astronomical. + Orbit.ID + Orbit.Uncertainity + 
+    Minimum.Orbit.Intersection + Jupiter.Tisserand.Invariant + 
+    Epoch.Osculation + Eccentricity + Semi.Major.Axis + Inclination + 
+    Asc.Node.Longitude + Orbital.Period + Perihelion.Distance + 
+    Perihelion.Arg + Aphelion.Dist + Perihelion.Time + Mean.Anomaly + 
+    Mean.Motion
+
+
+Step:  AIC=949.59
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Relative.Velocity.km.per.hr + 
+    Miles.per.hour + Miss.Dist..Astronomical. + Orbit.ID + Orbit.Uncertainity + 
+    Minimum.Orbit.Intersection + Jupiter.Tisserand.Invariant + 
+    Epoch.Osculation + Eccentricity + Semi.Major.Axis + Inclination + 
+    Asc.Node.Longitude + Orbital.Period + Perihelion.Distance + 
+    Perihelion.Arg + Perihelion.Time + Mean.Anomaly + Mean.Motion
+
+
+Step:  AIC=949.59
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Relative.Velocity.km.per.hr + 
+    Miss.Dist..Astronomical. + Orbit.ID + Orbit.Uncertainity + 
+    Minimum.Orbit.Intersection + Jupiter.Tisserand.Invariant + 
+    Epoch.Osculation + Eccentricity + Semi.Major.Axis + Inclination + 
+    Asc.Node.Longitude + Orbital.Period + Perihelion.Distance + 
+    Perihelion.Arg + Perihelion.Time + Mean.Anomaly + Mean.Motion
+
+                              Df Deviance     AIC
+- Orbit.ID                     1   763.64  941.14
+- Perihelion.Arg               1   763.64  941.15
+- Relative.Velocity.km.per.hr  1   763.68  941.19
+- Miss.Dist..Astronomical.     1   763.86  941.37
+- Epoch.Osculation             1   763.98  941.49
+- Orbital.Period               1   764.06  941.57
+- Asc.Node.Longitude           1   764.12  941.62
+- Perihelion.Time              1   764.23  941.74
+- Semi.Major.Axis              1   764.46  941.96
+- Mean.Anomaly                 1   764.53  942.03
+- Eccentricity                 1   764.89  942.39
+- Epoch.Date.Close.Approach    1   765.36  942.87
+- Perihelion.Distance          1   767.25  944.75
+- Jupiter.Tisserand.Invariant  1   768.67  946.18
+- Inclination                  1   768.75  946.25
+- Mean.Motion                  1   769.73  947.24
+- Orbit.Uncertainity           1   771.30  948.80
+&lt;none&gt;                             763.63  949.59
+- Est.Dia.in.KM.max.           1   774.49  951.99
+- Est.Dia.in.KM.min.           1   774.49  951.99
+- Absolute.Magnitude           1  1458.84 1636.34
+- Minimum.Orbit.Intersection   1  2261.85 2439.35
+
+Step:  AIC=941.14
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Relative.Velocity.km.per.hr + 
+    Miss.Dist..Astronomical. + Orbit.Uncertainity + Minimum.Orbit.Intersection + 
+    Jupiter.Tisserand.Invariant + Epoch.Osculation + Eccentricity + 
+    Semi.Major.Axis + Inclination + Asc.Node.Longitude + Orbital.Period + 
+    Perihelion.Distance + Perihelion.Arg + Perihelion.Time + 
+    Mean.Anomaly + Mean.Motion
+
+                              Df Deviance     AIC
+- Perihelion.Arg               1   763.65  932.70
+- Relative.Velocity.km.per.hr  1   763.69  932.75
+- Miss.Dist..Astronomical.     1   763.87  932.92
+- Epoch.Osculation             1   764.00  933.05
+- Orbital.Period               1   764.07  933.12
+- Asc.Node.Longitude           1   764.13  933.18
+- Perihelion.Time              1   764.25  933.30
+- Semi.Major.Axis              1   764.46  933.51
+- Mean.Anomaly                 1   764.54  933.59
+- Eccentricity                 1   764.89  933.94
+- Epoch.Date.Close.Approach    1   765.40  934.45
+- Perihelion.Distance          1   767.25  936.30
+- Jupiter.Tisserand.Invariant  1   768.69  937.74
+- Inclination                  1   768.77  937.82
+- Mean.Motion                  1   769.76  938.81
+- Orbit.Uncertainity           1   771.90  940.95
+&lt;none&gt;                             763.64  941.14
+- Est.Dia.in.KM.max.           1   774.49  943.54
+- Est.Dia.in.KM.min.           1   774.49  943.54
+- Absolute.Magnitude           1  1468.94 1637.99
+- Minimum.Orbit.Intersection   1  2295.48 2464.53
+
+Step:  AIC=932.7
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Relative.Velocity.km.per.hr + 
+    Miss.Dist..Astronomical. + Orbit.Uncertainity + Minimum.Orbit.Intersection + 
+    Jupiter.Tisserand.Invariant + Epoch.Osculation + Eccentricity + 
+    Semi.Major.Axis + Inclination + Asc.Node.Longitude + Orbital.Period + 
+    Perihelion.Distance + Perihelion.Time + Mean.Anomaly + Mean.Motion
+
+                              Df Deviance     AIC
+- Relative.Velocity.km.per.hr  1   763.71  924.31
+- Miss.Dist..Astronomical.     1   763.89  924.49
+- Epoch.Osculation             1   764.00  924.60
+- Orbital.Period               1   764.08  924.68
+- Asc.Node.Longitude           1   764.15  924.75
+- Perihelion.Time              1   764.26  924.86
+- Semi.Major.Axis              1   764.47  925.07
+- Mean.Anomaly                 1   764.54  925.14
+- Eccentricity                 1   764.90  925.49
+- Epoch.Date.Close.Approach    1   765.40  926.00
+- Perihelion.Distance          1   767.25  927.85
+- Jupiter.Tisserand.Invariant  1   768.69  929.29
+- Inclination                  1   768.77  929.37
+- Mean.Motion                  1   769.76  930.36
+- Orbit.Uncertainity           1   771.90  932.50
+&lt;none&gt;                             763.65  932.70
+- Est.Dia.in.KM.max.           1   774.50  935.10
+- Est.Dia.in.KM.min.           1   774.50  935.10
+- Absolute.Magnitude           1  1472.53 1633.13
+- Minimum.Orbit.Intersection   1  2296.13 2456.72
+
+Step:  AIC=924.31
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Miss.Dist..Astronomical. + Orbit.Uncertainity + 
+    Minimum.Orbit.Intersection + Jupiter.Tisserand.Invariant + 
+    Epoch.Osculation + Eccentricity + Semi.Major.Axis + Inclination + 
+    Asc.Node.Longitude + Orbital.Period + Perihelion.Distance + 
+    Perihelion.Time + Mean.Anomaly + Mean.Motion
+
+                              Df Deviance     AIC
+- Epoch.Osculation             1   764.05  916.19
+- Miss.Dist..Astronomical.     1   764.08  916.22
+- Orbital.Period               1   764.15  916.29
+- Asc.Node.Longitude           1   764.20  916.35
+- Perihelion.Time              1   764.29  916.44
+- Semi.Major.Axis              1   764.55  916.70
+- Mean.Anomaly                 1   764.60  916.74
+- Eccentricity                 1   764.95  917.09
+- Epoch.Date.Close.Approach    1   765.46  917.61
+- Perihelion.Distance          1   767.25  919.40
+- Inclination                  1   768.81  920.96
+- Jupiter.Tisserand.Invariant  1   769.12  921.26
+- Mean.Motion                  1   770.22  922.36
+- Orbit.Uncertainity           1   771.93  924.07
+&lt;none&gt;                             763.71  924.31
+- Est.Dia.in.KM.max.           1   774.50  926.65
+- Est.Dia.in.KM.min.           1   774.50  926.65
+- Absolute.Magnitude           1  1473.34 1625.48
+- Minimum.Orbit.Intersection   1  2319.89 2472.03
+
+Step:  AIC=916.19
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Miss.Dist..Astronomical. + Orbit.Uncertainity + 
+    Minimum.Orbit.Intersection + Jupiter.Tisserand.Invariant + 
+    Eccentricity + Semi.Major.Axis + Inclination + Asc.Node.Longitude + 
+    Orbital.Period + Perihelion.Distance + Perihelion.Time + 
+    Mean.Anomaly + Mean.Motion
+
+                              Df Deviance     AIC
+- Miss.Dist..Astronomical.     1   764.45  908.14
+- Asc.Node.Longitude           1   764.54  908.23
+- Orbital.Period               1   764.56  908.25
+- Mean.Anomaly                 1   764.63  908.32
+- Semi.Major.Axis              1   764.98  908.68
+- Perihelion.Time              1   765.05  908.74
+- Eccentricity                 1   765.21  908.90
+- Epoch.Date.Close.Approach    1   765.77  909.46
+- Perihelion.Distance          1   767.51  911.20
+- Inclination                  1   769.33  913.02
+- Jupiter.Tisserand.Invariant  1   769.69  913.38
+- Mean.Motion                  1   770.71  914.41
+&lt;none&gt;                             764.05  916.19
+- Orbit.Uncertainity           1   772.56  916.25
+- Est.Dia.in.KM.max.           1   775.02  918.71
+- Est.Dia.in.KM.min.           1   775.02  918.71
+- Absolute.Magnitude           1  1474.77 1618.47
+- Minimum.Orbit.Intersection   1  2323.62 2467.31
+
+Step:  AIC=908.14
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Orbit.Uncertainity + Minimum.Orbit.Intersection + 
+    Jupiter.Tisserand.Invariant + Eccentricity + Semi.Major.Axis + 
+    Inclination + Asc.Node.Longitude + Orbital.Period + Perihelion.Distance + 
+    Perihelion.Time + Mean.Anomaly + Mean.Motion
+
+                              Df Deviance     AIC
+- Asc.Node.Longitude           1   764.99  900.23
+- Orbital.Period               1   765.01  900.25
+- Mean.Anomaly                 1   765.05  900.30
+- Semi.Major.Axis              1   765.45  900.69
+- Perihelion.Time              1   765.53  900.77
+- Eccentricity                 1   765.58  900.82
+- Epoch.Date.Close.Approach    1   766.23  901.47
+- Perihelion.Distance          1   767.78  903.02
+- Inclination                  1   769.57  904.82
+- Jupiter.Tisserand.Invariant  1   769.96  905.20
+- Mean.Motion                  1   770.90  906.15
+&lt;none&gt;                             764.45  908.14
+- Orbit.Uncertainity           1   773.03  908.27
+- Est.Dia.in.KM.max.           1   775.15  910.39
+- Est.Dia.in.KM.min.           1   775.15  910.39
+- Absolute.Magnitude           1  1481.79 1617.03
+- Minimum.Orbit.Intersection   1  2361.32 2496.56
+
+Step:  AIC=900.23
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Orbit.Uncertainity + Minimum.Orbit.Intersection + 
+    Jupiter.Tisserand.Invariant + Eccentricity + Semi.Major.Axis + 
+    Inclination + Orbital.Period + Perihelion.Distance + Perihelion.Time + 
+    Mean.Anomaly + Mean.Motion
+
+                              Df Deviance     AIC
+- Orbital.Period               1   765.51  892.30
+- Mean.Anomaly                 1   765.63  892.42
+- Semi.Major.Axis              1   765.93  892.72
+- Perihelion.Time              1   766.08  892.87
+- Eccentricity                 1   766.13  892.92
+- Epoch.Date.Close.Approach    1   766.73  893.52
+- Perihelion.Distance          1   768.22  895.01
+- Inclination                  1   769.89  896.68
+- Jupiter.Tisserand.Invariant  1   770.31  897.09
+- Mean.Motion                  1   771.23  898.02
+&lt;none&gt;                             764.99  900.23
+- Orbit.Uncertainity           1   773.49  900.28
+- Est.Dia.in.KM.max.           1   775.64  902.43
+- Est.Dia.in.KM.min.           1   775.64  902.43
+- Absolute.Magnitude           1  1482.51 1609.30
+- Minimum.Orbit.Intersection   1  2362.23 2489.02
+
+Step:  AIC=892.3
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Orbit.Uncertainity + Minimum.Orbit.Intersection + 
+    Jupiter.Tisserand.Invariant + Eccentricity + Semi.Major.Axis + 
+    Inclination + Perihelion.Distance + Perihelion.Time + Mean.Anomaly + 
+    Mean.Motion
+
+                              Df Deviance     AIC
+- Mean.Anomaly                 1   766.19  884.52
+- Eccentricity                 1   766.20  884.53
+- Perihelion.Time              1   766.44  884.77
+- Epoch.Date.Close.Approach    1   767.34  885.67
+- Perihelion.Distance          1   768.53  886.86
+- Inclination                  1   770.07  888.41
+- Semi.Major.Axis              1   770.83  889.16
+- Jupiter.Tisserand.Invariant  1   770.84  889.18
+- Mean.Motion                  1   771.29  889.63
+- Orbit.Uncertainity           1   773.63  891.96
+&lt;none&gt;                             765.51  892.30
+- Est.Dia.in.KM.max.           1   776.03  894.37
+- Est.Dia.in.KM.min.           1   776.03  894.37
+- Absolute.Magnitude           1  1490.81 1609.14
+- Minimum.Orbit.Intersection   1  2362.23 2480.57
+
+Step:  AIC=884.52
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Orbit.Uncertainity + Minimum.Orbit.Intersection + 
+    Jupiter.Tisserand.Invariant + Eccentricity + Semi.Major.Axis + 
+    Inclination + Perihelion.Distance + Perihelion.Time + Mean.Motion
+
+                              Df Deviance     AIC
+- Eccentricity                 1   766.82  876.70
+- Perihelion.Time              1   767.10  876.98
+- Epoch.Date.Close.Approach    1   767.84  877.72
+- Perihelion.Distance          1   769.15  879.03
+- Inclination                  1   770.89  880.77
+- Jupiter.Tisserand.Invariant  1   771.52  881.41
+- Semi.Major.Axis              1   771.53  881.41
+- Mean.Motion                  1   771.96  881.84
+- Orbit.Uncertainity           1   774.49  884.37
+&lt;none&gt;                             766.19  884.52
+- Est.Dia.in.KM.max.           1   776.85  886.73
+- Est.Dia.in.KM.min.           1   776.85  886.73
+- Absolute.Magnitude           1  1492.53 1602.41
+- Minimum.Orbit.Intersection   1  2368.43 2478.31
+
+Step:  AIC=876.7
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Orbit.Uncertainity + Minimum.Orbit.Intersection + 
+    Jupiter.Tisserand.Invariant + Semi.Major.Axis + Inclination + 
+    Perihelion.Distance + Perihelion.Time + Mean.Motion
+
+                              Df Deviance     AIC
+- Perihelion.Time              1   767.67  869.10
+- Epoch.Date.Close.Approach    1   768.55  869.98
+- Perihelion.Distance          1   769.94  871.37
+- Semi.Major.Axis              1   771.59  873.02
+- Inclination                  1   772.46  873.89
+- Jupiter.Tisserand.Invariant  1   772.86  874.29
+- Mean.Motion                  1   773.04  874.47
+&lt;none&gt;                             766.82  876.70
+- Orbit.Uncertainity           1   775.33  876.76
+- Est.Dia.in.KM.max.           1   776.95  878.38
+- Est.Dia.in.KM.min.           1   776.95  878.38
+- Absolute.Magnitude           1  1504.02 1605.45
+- Minimum.Orbit.Intersection   1  2413.28 2514.71
+
+Step:  AIC=869.1
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Epoch.Date.Close.Approach + Orbit.Uncertainity + Minimum.Orbit.Intersection + 
+    Jupiter.Tisserand.Invariant + Semi.Major.Axis + Inclination + 
+    Perihelion.Distance + Mean.Motion
+
+                              Df Deviance     AIC
+- Epoch.Date.Close.Approach    1   769.30  862.28
+- Perihelion.Distance          1   770.77  863.75
+- Semi.Major.Axis              1   772.28  865.25
+- Inclination                  1   772.97  865.95
+- Jupiter.Tisserand.Invariant  1   773.55  866.53
+- Mean.Motion                  1   773.74  866.72
+- Orbit.Uncertainity           1   775.35  868.33
+&lt;none&gt;                             767.67  869.10
+- Est.Dia.in.KM.max.           1   777.57  870.55
+- Est.Dia.in.KM.min.           1   777.57  870.55
+- Absolute.Magnitude           1  1515.93 1608.91
+- Minimum.Orbit.Intersection   1  2423.31 2516.29
+
+Step:  AIC=862.28
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Orbit.Uncertainity + Minimum.Orbit.Intersection + Jupiter.Tisserand.Invariant + 
+    Semi.Major.Axis + Inclination + Perihelion.Distance + Mean.Motion
+
+                              Df Deviance     AIC
+- Perihelion.Distance          1   771.99  856.52
+- Semi.Major.Axis              1   773.46  857.98
+- Inclination                  1   774.07  858.59
+- Jupiter.Tisserand.Invariant  1   774.63  859.16
+- Mean.Motion                  1   774.82  859.35
+- Orbit.Uncertainity           1   776.69  861.21
+&lt;none&gt;                             769.30  862.28
+- Est.Dia.in.KM.max.           1   778.88  863.41
+- Est.Dia.in.KM.min.           1   778.88  863.41
+- Absolute.Magnitude           1  1517.60 1602.12
+- Minimum.Orbit.Intersection   1  2424.77 2509.30
+
+Step:  AIC=856.52
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Orbit.Uncertainity + Minimum.Orbit.Intersection + Jupiter.Tisserand.Invariant + 
+    Semi.Major.Axis + Inclination + Mean.Motion
+
+                              Df Deviance     AIC
+- Semi.Major.Axis              1   773.47  849.54
+- Inclination                  1   774.07  850.14
+- Jupiter.Tisserand.Invariant  1   775.40  851.47
+- Mean.Motion                  1   776.03  852.10
+- Orbit.Uncertainity           1   779.07  855.14
+&lt;none&gt;                             771.99  856.52
+- Est.Dia.in.KM.max.           1   781.44  857.51
+- Est.Dia.in.KM.min.           1   781.44  857.51
+- Absolute.Magnitude           1  1567.12 1643.20
+- Minimum.Orbit.Intersection   1  2434.73 2510.81
+
+Step:  AIC=849.54
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Orbit.Uncertainity + Minimum.Orbit.Intersection + Jupiter.Tisserand.Invariant + 
+    Inclination + Mean.Motion
+
+                              Df Deviance     AIC
+- Inclination                  1   774.57  842.19
+- Jupiter.Tisserand.Invariant  1   775.51  843.13
+- Mean.Motion                  1   776.04  843.66
+- Orbit.Uncertainity           1   780.47  848.09
+&lt;none&gt;                             773.47  849.54
+- Est.Dia.in.KM.max.           1   782.87  850.49
+- Est.Dia.in.KM.min.           1   782.87  850.49
+- Absolute.Magnitude           1  1573.51 1641.13
+- Minimum.Orbit.Intersection   1  2484.25 2551.87
+
+Step:  AIC=842.19
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Orbit.Uncertainity + Minimum.Orbit.Intersection + Jupiter.Tisserand.Invariant + 
+    Mean.Motion
+
+                              Df Deviance     AIC
+- Jupiter.Tisserand.Invariant  1   776.18  835.35
+- Mean.Motion                  1   776.62  835.79
+- Orbit.Uncertainity           1   780.98  840.14
+&lt;none&gt;                             774.57  842.19
+- Est.Dia.in.KM.max.           1   783.75  842.92
+- Est.Dia.in.KM.min.           1   783.75  842.92
+- Absolute.Magnitude           1  1642.10 1701.27
+- Minimum.Orbit.Intersection   1  2619.82 2678.99
+
+Step:  AIC=835.35
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Orbit.Uncertainity + Minimum.Orbit.Intersection + Mean.Motion
+
+                             Df Deviance     AIC
+- Mean.Motion                 1   778.25  828.96
+&lt;none&gt;                            776.18  835.35
+- Orbit.Uncertainity          1   785.12  835.83
+- Est.Dia.in.KM.max.          1   785.37  836.09
+- Est.Dia.in.KM.min.          1   785.37  836.09
+- Absolute.Magnitude          1  1738.60 1789.32
+- Minimum.Orbit.Intersection  1  2621.67 2672.38
+
+Step:  AIC=828.96
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Orbit.Uncertainity + Minimum.Orbit.Intersection
+
+                             Df Deviance     AIC
+- Orbit.Uncertainity          1   785.66  827.92
+&lt;none&gt;                            778.25  828.96
+- Est.Dia.in.KM.max.          1   788.34  830.60
+- Est.Dia.in.KM.min.          1   788.34  830.60
+- Absolute.Magnitude          1  1796.23 1838.49
+- Minimum.Orbit.Intersection  1  2635.30 2677.56
+
+Step:  AIC=827.92
+Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. + 
+    Minimum.Orbit.Intersection
+
+                             Df Deviance     AIC
+&lt;none&gt;                            785.66  827.92
+- Est.Dia.in.KM.max.          1   796.01  829.82
+- Est.Dia.in.KM.min.          1   796.01  829.82
+- Absolute.Magnitude          1  2338.66 2372.47
+- Minimum.Orbit.Intersection  1  2682.86 2716.67</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(glm_bwd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = Hazardous ~ Absolute.Magnitude + Est.Dia.in.KM.min. + 
+    Est.Dia.in.KM.max. + Minimum.Orbit.Intersection, family = "binomial", 
+    data = train_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.2495  -0.0519  -0.0035   0.0000   5.7387  
+
+Coefficients:
+                             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)                 6.635e+01  3.906e+00  16.987  &lt; 2e-16 ***
+Absolute.Magnitude         -2.861e+00  1.691e-01 -16.922  &lt; 2e-16 ***
+Est.Dia.in.KM.min.         -8.513e+09  2.673e+09  -3.184  0.00145 ** 
+Est.Dia.in.KM.max.          3.807e+09  1.196e+09   3.184  0.00145 ** 
+Minimum.Orbit.Intersection -1.192e+02  6.760e+00 -17.627  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 3310.76  on 3749  degrees of freedom
+Residual deviance:  785.66  on 3745  degrees of freedom
+AIC: 795.66
+
+Number of Fisher Scoring iterations: 11</code></pre>
+</div>
+</div>
+</section>
+<section id="apply-lasso" class="level2">
+<h2 class="anchored" data-anchor-id="apply-lasso">Apply LASSO</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>x_vars <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">scale</span>(nasa_data[, <span class="sc">-</span><span class="dv">24</span>]))</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create sequence of lambda values</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>lambda_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">0.1</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Run lasso cross validation</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>glm_lasso_cv <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(<span class="at">x =</span> <span class="fu">as.matrix</span>(x_vars), <span class="co"># Set explanatory variables</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> <span class="fu">as.numeric</span>(nasa_data<span class="sc">$</span>Hazardous), <span class="co"># Set response variable</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">alpha =</span> <span class="dv">1</span>, <span class="co"># Set alpha as 1 for lasso</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">lambda =</span> lambda_seq, <span class="co"># Set lambda as sequence of lambda values</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">nfolds =</span> <span class="dv">10</span>) <span class="co"># Set number of folds as 10</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>best_lam <span class="ot">&lt;-</span> glm_lasso_cv<span class="sc">$</span>lambda<span class="fl">.1</span>se <span class="co"># Extract best lambda</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>best_lam <span class="co"># View best lambda</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>glm_lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> x_vars,</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">y =</span> nasa_data<span class="sc">$</span>Hazardous,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">alpha =</span> <span class="dv">1</span>, </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">family =</span> <span class="st">"binomial"</span>, </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">lambda =</span> best_lam)</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(glm_lasso)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>24 x 1 sparse Matrix of class "dgCMatrix"
+                                     s0
+(Intercept)                 -1.66445394
+Absolute.Magnitude          -0.15470901
+Est.Dia.in.KM.min.           .         
+Est.Dia.in.KM.max.           .         
+Epoch.Date.Close.Approach    .         
+Relative.Velocity.km.per.hr  .         
+Miles.per.hour               .         
+Miss.Dist..Astronomical.     .         
+Orbit.ID                     .         
+Orbit.Uncertainity          -0.08686792
+Minimum.Orbit.Intersection  -0.14471879
+Jupiter.Tisserand.Invariant  .         
+Epoch.Osculation             .         
+Eccentricity                 .         
+Semi.Major.Axis              .         
+Inclination                  .         
+Asc.Node.Longitude           .         
+Orbital.Period               .         
+Perihelion.Distance          .         
+Perihelion.Arg               .         
+Aphelion.Dist                .         
+Perihelion.Time              .         
+Mean.Anomaly                 .         
+Mean.Motion                  .         </code></pre>
+</div>
+</div>
+</section>
+<section id="model-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="model-evaluation">Model Evaluation</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>glm_full_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm_full, <span class="at">newdata =</span> test_data, <span class="at">type =</span> <span class="st">'response'</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>glm_bwd_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm_bwd, <span class="at">newdata =</span> test_data, <span class="at">type =</span> <span class="st">'response'</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>glm_full_acc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(<span class="fu">ifelse</span>(glm_full_pred <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">'True'</span>, <span class="st">'False'</span>)), test_data<span class="sc">$</span>Hazardous, <span class="at">positive =</span> <span class="st">'True'</span>)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(glm_full_acc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction False True
+     False   774   17
+     True     12  134
+                                          
+               Accuracy : 0.9691          
+                 95% CI : (0.9559, 0.9792)
+    No Information Rate : 0.8388          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.884           
+                                          
+ Mcnemar's Test P-Value : 0.4576          
+                                          
+            Sensitivity : 0.8874          
+            Specificity : 0.9847          
+         Pos Pred Value : 0.9178          
+         Neg Pred Value : 0.9785          
+             Prevalence : 0.1612          
+         Detection Rate : 0.1430          
+   Detection Prevalence : 0.1558          
+      Balanced Accuracy : 0.9361          
+                                          
+       'Positive' Class : True            
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>glm_bwd_acc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(<span class="fu">ifelse</span>(glm_bwd_pred <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">'True'</span>, <span class="st">'False'</span>)), test_data<span class="sc">$</span>Hazardous, <span class="at">positive =</span> <span class="st">'True'</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(glm_bwd_acc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction False True
+     False   772   20
+     True     14  131
+                                          
+               Accuracy : 0.9637          
+                 95% CI : (0.9497, 0.9747)
+    No Information Rate : 0.8388          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.8636          
+                                          
+ Mcnemar's Test P-Value : 0.3912          
+                                          
+            Sensitivity : 0.8675          
+            Specificity : 0.9822          
+         Pos Pred Value : 0.9034          
+         Neg Pred Value : 0.9747          
+             Prevalence : 0.1612          
+         Detection Rate : 0.1398          
+   Detection Prevalence : 0.1547          
+      Balanced Accuracy : 0.9249          
+                                          
+       'Positive' Class : True            
+                                          </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="neural-network-model" class="level1">
+<h1>Neural Network Model</h1>
+<section id="standardization" class="level2">
+<h2 class="anchored" data-anchor-id="standardization">Standardization</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale train data</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>x_train_nn <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> Absolute.Magnitude <span class="sc">+</span> Est.Dia.in.KM.min. <span class="sc">+</span> Est.Dia.in.KM.max. <span class="sc">+</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>                             Epoch.Date.Close.Approach <span class="sc">+</span> Relative.Velocity.km.per.hr <span class="sc">+</span></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>                             Miles.per.hour <span class="sc">+</span> Miss.Dist..Astronomical. <span class="sc">+</span> Orbit.ID <span class="sc">+</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>                             Orbit.Uncertainity <span class="sc">+</span> Minimum.Orbit.Intersection <span class="sc">+</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>                             Jupiter.Tisserand.Invariant <span class="sc">+</span> Epoch.Osculation <span class="sc">+</span> Eccentricity <span class="sc">+</span></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>                             Semi.Major.Axis <span class="sc">+</span> Inclination <span class="sc">+</span> Asc.Node.Longitude <span class="sc">+</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>                             Orbital.Period <span class="sc">+</span> Perihelion.Distance <span class="sc">+</span> Perihelion.Arg <span class="sc">+</span></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>                             Aphelion.Dist <span class="sc">+</span> Perihelion.Time <span class="sc">+</span> Mean.Anomaly <span class="sc">+</span> Mean.Motion,</span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">data =</span> train_data)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a><span class="co"># standardization</span></span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>x_mean <span class="ot">&lt;-</span> <span class="fu">apply</span>(x_train_nn, <span class="dv">2</span>, mean)</span>
+<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a>x_sd <span class="ot">&lt;-</span> <span class="fu">apply</span>(x_train_nn, <span class="dv">2</span>, sd)</span>
+<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a>x_train_nn <span class="ot">&lt;-</span> <span class="fu">scale</span>(x_train_nn, <span class="at">center =</span> x_mean, <span class="at">scale =</span> x_sd)</span>
+<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-17"><a href="#cb58-17" aria-hidden="true" tabindex="-1"></a><span class="co"># combine with dependent variable Outcome</span></span>
+<span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a>x_train_nn <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(train_data<span class="sc">$</span>Hazardous, x_train_nn)</span>
+<span id="cb58-19"><a href="#cb58-19" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(x_train_nn)[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">'Hazardous'</span></span>
+<span id="cb58-20"><a href="#cb58-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-21"><a href="#cb58-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-22"><a href="#cb58-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale test data</span></span>
+<span id="cb58-23"><a href="#cb58-23" aria-hidden="true" tabindex="-1"></a>x_test_nn <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> Absolute.Magnitude <span class="sc">+</span> Est.Dia.in.KM.min. <span class="sc">+</span> Est.Dia.in.KM.max. <span class="sc">+</span></span>
+<span id="cb58-24"><a href="#cb58-24" aria-hidden="true" tabindex="-1"></a>                             Epoch.Date.Close.Approach <span class="sc">+</span> Relative.Velocity.km.per.hr <span class="sc">+</span></span>
+<span id="cb58-25"><a href="#cb58-25" aria-hidden="true" tabindex="-1"></a>                             Miles.per.hour <span class="sc">+</span> Miss.Dist..Astronomical. <span class="sc">+</span> Orbit.ID <span class="sc">+</span></span>
+<span id="cb58-26"><a href="#cb58-26" aria-hidden="true" tabindex="-1"></a>                             Orbit.Uncertainity <span class="sc">+</span> Minimum.Orbit.Intersection <span class="sc">+</span></span>
+<span id="cb58-27"><a href="#cb58-27" aria-hidden="true" tabindex="-1"></a>                             Jupiter.Tisserand.Invariant <span class="sc">+</span> Epoch.Osculation <span class="sc">+</span> Eccentricity <span class="sc">+</span></span>
+<span id="cb58-28"><a href="#cb58-28" aria-hidden="true" tabindex="-1"></a>                             Semi.Major.Axis <span class="sc">+</span> Inclination <span class="sc">+</span> Asc.Node.Longitude <span class="sc">+</span></span>
+<span id="cb58-29"><a href="#cb58-29" aria-hidden="true" tabindex="-1"></a>                             Orbital.Period <span class="sc">+</span> Perihelion.Distance <span class="sc">+</span> Perihelion.Arg <span class="sc">+</span></span>
+<span id="cb58-30"><a href="#cb58-30" aria-hidden="true" tabindex="-1"></a>                             Aphelion.Dist <span class="sc">+</span> Perihelion.Time <span class="sc">+</span> Mean.Anomaly <span class="sc">+</span> Mean.Motion,</span>
+<span id="cb58-31"><a href="#cb58-31" aria-hidden="true" tabindex="-1"></a>                           <span class="at">data =</span> test_data)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb58-32"><a href="#cb58-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-33"><a href="#cb58-33" aria-hidden="true" tabindex="-1"></a>x_test_nn <span class="ot">&lt;-</span> <span class="fu">scale</span>(x_test_nn, <span class="at">center =</span> x_mean, <span class="at">scale =</span> x_sd)</span>
+<span id="cb58-34"><a href="#cb58-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-35"><a href="#cb58-35" aria-hidden="true" tabindex="-1"></a>x_test_nn <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(test_data<span class="sc">$</span>Hazardous, x_test_nn)</span>
+<span id="cb58-36"><a href="#cb58-36" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(x_test_nn)[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">'Hazardous'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="neural-network-model-creation" class="level2">
+<h2 class="anchored" data-anchor-id="neural-network-model-creation">Neural Network Model Creation</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Decide the number of hidden layer and neurons</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>seq_1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(seq_1, seq_1)</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>accuracy_res <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">nrow</span>(params))</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">56</span><span class="sc">:</span><span class="fu">nrow</span>(params)){</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(Hazardous <span class="sc">==</span> <span class="st">'True'</span> <span class="sc">~</span> ., <span class="at">data =</span> x_train_nn,</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">hidden =</span> <span class="fu">c</span>(params[i,<span class="dv">1</span>],params[i,<span class="dv">2</span>]), <span class="at">linear.output =</span> F)</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>  accuracy_res[i] <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(<span class="fu">ifelse</span>(<span class="fu">predict</span>(model, <span class="at">newdata =</span> x_test_nn)[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">'True'</span>, <span class="st">'False'</span>)), test_data<span class="sc">$</span>Hazardous, <span class="at">positive =</span> <span class="st">'True'</span>)[<span class="dv">3</span>][[<span class="dv">1</span>]][[<span class="st">'Accuracy'</span>]]</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>accuracy_table <span class="ot">&lt;-</span> <span class="fu">cbind</span>(params, accuracy_res)</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>accuracy_table[<span class="fu">which.max</span>(accuracy_table<span class="sc">$</span>accuracy_res), ] <span class="co"># two layers with 5 neurons on 1st and 4 neurons on 2nd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>nn1 <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(Hazardous <span class="sc">==</span> <span class="st">'True'</span> <span class="sc">~</span> ., <span class="at">data =</span> x_train_nn, <span class="at">hidden =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>), <span class="at">linear.output =</span> F)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>nn1_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(nn1, <span class="at">newdata =</span> x_test_nn)[, <span class="dv">1</span>]</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>nn1_acc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(<span class="fu">ifelse</span>(nn1_pred <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">'True'</span>, <span class="st">'False'</span>)),</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>                           test_data<span class="sc">$</span>Hazardous, <span class="at">positive =</span> <span class="st">'True'</span>)</span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>nn1_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction False True
+     False   785    2
+     True      1  149
+                                          
+               Accuracy : 0.9968          
+                 95% CI : (0.9907, 0.9993)
+    No Information Rate : 0.8388          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.9881          
+                                          
+ Mcnemar's Test P-Value : 1               
+                                          
+            Sensitivity : 0.9868          
+            Specificity : 0.9987          
+         Pos Pred Value : 0.9933          
+         Neg Pred Value : 0.9975          
+             Prevalence : 0.1612          
+         Detection Rate : 0.1590          
+   Detection Prevalence : 0.1601          
+      Balanced Accuracy : 0.9927          
+                                          
+       'Positive' Class : True            
+                                          </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="model-comparison" class="level1">
+<h1>Model Comparison</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare Confusion Matrix</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check accuracy</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">'XGBoost'</span>, <span class="fu">round</span>(xgb_acc[<span class="dv">3</span>]<span class="sc">$</span>overall[<span class="dv">1</span>],<span class="dv">4</span>), <span class="at">sep =</span> <span class="st">": "</span>),</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">'glm_bwd'</span>, <span class="fu">round</span>(glm_bwd_acc[<span class="dv">3</span>]<span class="sc">$</span>overall[<span class="dv">1</span>],<span class="dv">4</span>), <span class="at">sep =</span> <span class="st">": "</span>),</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">'nn'</span>, <span class="fu">round</span>(nn1_acc[<span class="dv">3</span>]<span class="sc">$</span>overall[<span class="dv">1</span>],<span class="dv">4</span>), <span class="at">sep =</span> <span class="st">": "</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "XGBoost: 0.9957" "glm_bwd: 0.9637" "nn: 0.9968"     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Sensitivity</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">'XGBoost'</span>, <span class="fu">round</span>(xgb_acc[<span class="dv">4</span>]<span class="sc">$</span>byClass[<span class="dv">1</span>],<span class="dv">4</span>), <span class="at">sep =</span> <span class="st">": "</span>),</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">'glm_bwd'</span>, <span class="fu">round</span>(glm_bwd_acc[<span class="dv">4</span>]<span class="sc">$</span>byClass[<span class="dv">1</span>],<span class="dv">4</span>), <span class="at">sep =</span> <span class="st">": "</span>),</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">'nn'</span>, <span class="fu">round</span>(nn1_acc[<span class="dv">4</span>]<span class="sc">$</span>byClass[<span class="dv">1</span>],<span class="dv">4</span>), <span class="at">sep =</span> <span class="st">": "</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "XGBoost: 0.9868" "glm_bwd: 0.8675" "nn: 0.9868"     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Specificity</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">'XGBoost'</span>, <span class="fu">round</span>(xgb_acc[<span class="dv">4</span>]<span class="sc">$</span>byClass[<span class="dv">2</span>],<span class="dv">4</span>), <span class="at">sep =</span> <span class="st">": "</span>),</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">'glm_bwd'</span>, <span class="fu">round</span>(glm_bwd_acc[<span class="dv">4</span>]<span class="sc">$</span>byClass[<span class="dv">2</span>],<span class="dv">4</span>), <span class="at">sep =</span> <span class="st">": "</span>),</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">'nn'</span>, <span class="fu">round</span>(nn1_acc[<span class="dv">4</span>]<span class="sc">$</span>byClass[<span class="dv">2</span>],<span class="dv">4</span>), <span class="at">sep =</span> <span class="st">": "</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "XGBoost: 0.9975" "glm_bwd: 0.9822" "nn: 0.9987"     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot ROC</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate XGBoost ROC</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>roc1 <span class="ot">=</span> <span class="fu">roc</span>(test_data<span class="sc">$</span>Hazardous, boost_preds_1)</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Logistic Regression ROC</span></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>roc2 <span class="ot">=</span> <span class="fu">roc</span>(test_data<span class="sc">$</span>Hazardous, glm_full_pred)</span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Neural Network ROC</span></span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>roc3 <span class="ot">=</span> <span class="fu">roc</span>(test_data<span class="sc">$</span>Hazardous, nn1_pred)</span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.roc</span>(roc1, <span class="at">print.auc =</span> <span class="cn">TRUE</span>, <span class="at">print.auc.x =</span> <span class="dv">0</span>, <span class="at">print.auc.y =</span> <span class="fl">0.4</span>, <span class="at">col =</span> <span class="st">"navy"</span>, <span class="at">print.auc.col =</span> <span class="st">"navy"</span>)</span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.roc</span>(roc2, <span class="at">print.auc =</span> <span class="cn">TRUE</span>, <span class="at">print.auc.x =</span> <span class="dv">0</span>, <span class="at">print.auc.y =</span> <span class="fl">0.6</span>, <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">print.auc.col =</span> <span class="st">"green"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.roc</span>(roc3, <span class="at">print.auc =</span> <span class="cn">TRUE</span>, <span class="at">print.auc.x =</span> <span class="dv">0</span>, <span class="at">print.auc.y =</span> <span class="fl">0.8</span>, <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">print.auc.col =</span> <span class="st">"orange"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Machine-Learning-Project-Final-Analysis_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

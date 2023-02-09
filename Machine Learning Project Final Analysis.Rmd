@@ -1,0 +1,492 @@
+---
+title: " Asteroid Data Analysis"
+author: "Issac Chan, Lance Yuan, and Eva Wang"
+format:
+  html:
+    theme: solar
+    toc: true
+    toc-location: left
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=12, fig.height=8)
+```
+
+```{r, message=FALSE}
+# Import data
+total_data <- read.csv('nasa.csv', header = T, stringsAsFactors = T)
+
+# Library Everything
+library(ggplot2)
+library(reshape) 
+library(ggcorrplot)
+library(splitstackshape) 
+library(randomForest)
+library(xgboost)
+library(caret)
+library(OptimalCutpoints) 
+library(ggforce)
+library(glmnet)
+library(neuralnet)
+library(pROC)
+library(plotmo)
+source("a_insights_shap_functions.r")
+```
+
+# Data Overview
+```{r}
+head(total_data, 5)
+str(total_data)
+dim(total_data) 
+```
+
+## Variable list
+
+1. `Neo.Reference.ID` - the reference ID assigned to an asteroid
+2. `Name` - the name given to an asteroid 
+3. `Absolute.Magnitude` - the visual magnitude of an asteroid at zero phase angle and at unit heliocentric and geocentric distances
+4. `Est.Dia.in.KM.min.` - the estimated minimum diameter of the asteroid in kilometers (KM) 
+5. `Est.Dia.in.KM.max.` - the estimated maximum diameter of the asteroid in kilometers (KM)  
+6. `Est.Dia.in.M.min.` - the estimated minimum diameter of the asteroid in meters (M)  
+7. `Est.Dia.in.M.max.` - the estimated maximum diameter of the asteroid in meters (M) 
+8. `Est.Dia.in.Miles.min.` - the estimated minimum diameter of the asteroid in miles    
+9. `Est.Dia.in.Miles.max.` - the estimated maximum diameter of the asteroid in miles
+10. `Est.Dia.in.Feet.min.` - the estimated minimum diameter of the asteroid in feet      
+11. `Est.Dia.in.Feet.max.` - the estimated maximum diameter of the asteroid in miles          
+12. `Close.Approach.Date` - the date of when the asteroid will be near Earth         
+13. `Epoch.Date.Close.Approach` - the reference of time of when the asteroid will be near Earth
+14. `Relative.Velocity.km.per.sec` - the relative velocity of the asteroid in kilometer per second
+15. `Relative.Velocity.km.per.hr` - the relative velocity of the asteroid in kilometer per hour
+16. `Miles.per.hour` - the velocity of the asteroid in kilometer per hour             
+17. `Miss.Dist..Astronomical.` - the miss distance (measure proximity) of the asteroid in astronomical unit    
+18. `Miss.Dist..lunar.` - the miss distance (measure proximity) of the asteroid in lunar distance      
+19. `Miss.Dist..kilometers.` -  the miss distance (measure proximity) of the asteroid in kilometers     
+20. `Miss.Dist..miles.` - the miss distance (measure proximity) of the asteroid in miles        
+21. `Orbiting.Body` - the planet around which the asteroid is revolving                
+22. `Orbit.ID` - the ID for the orbit                     
+23. `Orbit.Determination.Date` - the date when the orbit is determined/found    
+24. `Orbit.Uncertainity` - the uncertainty of the orbit          
+25. `Minimum.Orbit.Intersection` - the potential close approaches and collision risks between astronomical objects   
+26. `Jupiter.Tisserand.Invariant` - distinguish different kinds of orbits
+27. `Epoch.Osculation` - the orbit that is calculated from the position and velocity vectors at a particular instant of time (i.e., epoch)            
+28. `Eccentricity` - a measure of how far from circular each orbit is: the smaller the eccentricity number, the more circular the realm                
+29. `Semi.Major.Axis` - the value of the longest diameter (i.e., the Semi Major Axis) of the asteroid’s orbit             
+30. `Inclination` -  the angle between the orbit plane and the ecliptic plane                 
+31. `Asc.Node.Longitude` - the angle in the ecliptic plane between the inertial-frame x-axis and the line through the ascending node.           
+32. `Orbital.Period` - the time taken by the asteroid to make one full revolution around its orbiting body
+33. `Perihelion.Distance` - the distance of the asteroid's closest point to the Sun           
+34. `Perihelion.Arg` - the angle in the orbit plane between the ascending node and the perihelion point
+35. `Aphelion.Dist` - the distance of the asteroid's farthest point to the Sun              
+36. `Perihelion.Time` - the length of time to complete Perihelion (unit unknown)            
+37. `Mean.Anomaly` - the mean of the angles in the orbit plane between the perihelion point and the position of the orbiting object                 
+38. `Mean.Motion` - the angular speed required for a body to complete one orbit                 
+39. `Equinox` - the moment in time when the Sun crosses the asteroid's equator                      
+40. `Hazardous` - whether the asteroid is hazardous or not   
+
+# Data Cleaning
+
+Just based on the description/definition of each variable, some of them are identical and some captures the same value but in different units. For the sake of our analysis, we will drop those repeated columns:
+
+```{r}
+# Neo.Reference.ID and Name are identical
+all(total_data$Neo.Reference.ID == total_data$Name)
+```
+
+`Neo.Reference.ID` and `Name` are identical columns, so `Name` will be kept. `Est.Dia.in.KM.min.`, `Est.Dia.in.M.min.`, `Est.Dia.in.Miles.min.`, `Est.Dia.in.Feet.min.` are the same value in different units. Same for the max. For the sake of our analysis, we will only use `Est.Dia.in.KM.min.` and `Est.Dia.in.KM.max.`. To maintain consistency in units, we will use `Relative.Velocity.km.per.hr`. For Miss.Dist., we will only use `Miss.Dist..Astronomical.`. Also, `Equinox` only has one value J2000 and `Orbiting.Body` only has Earth which probably are not good predictors. Since our data captures the status of 4687 asteroids at an Epoch (i.e., at a certain time), `Close.Approach.Date` and `Orbit.Determination.Date` may not be good reference for our current time frame and thus will be removed
+
+```{r}
+# Filter data
+nasa_data <- total_data[, - c(1:2, 6:12, 14, 18:21, 23, 39)]
+
+# Check Points
+summary(nasa_data) # no NAs
+str(nasa_data) # correct data format
+nrow(unique(nasa_data)) == nrow(nasa_data) # no replicates
+```
+
+We will set `Hazardous` as our response variable and there are 755 cases of hazardous and 3932 cases of non-hazardous, which is imbalanced data
+
+# Visualization
+
+```{r, message=FALSE, warning=FALSE, out.width="200%"}
+# Imbalanced Response Variable
+ggplot(nasa_data, aes(x = Hazardous)) +
+  geom_bar()+ 
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.border = element_blank(), 
+        panel.background = element_blank(),
+        text = element_text(size = 15)) 
+
+# Boxplot all variables
+m_dat <- melt(nasa_data, id.vars = "Hazardous") 
+
+ggplot(m_dat, aes( y = value, x = factor(Hazardous), fill = factor(Hazardous))) + 
+  geom_boxplot() + 
+  facet_wrap(~ variable, scales = "free") + 
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.border = element_blank(), 
+        panel.background = element_blank(),
+        text = element_text(size = 15)) + 
+  labs(x = "Hazardous", title = "Hazardous or not", fill = "Hazardous") + 
+  scale_fill_manual(values = c("True" = "red", "False" = "blue"), 
+                    labels = c("True" = "Hazardous", "False" = "Not Hazardous"))
+
+# Correlation matrix
+nasa_corr <- cor(nasa_data[,-24])
+ggcorrplot(nasa_corr, method = c('square'),hc.order = TRUE, type = "lower", outline.color = 'white') +
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.border = element_blank(), 
+        panel.background = element_blank(),
+        axis.text.x = element_text(angle = 90),
+        text = element_text(size = 15)) + 
+  labs(x = "", title = "Correlation Matrix", y = "") 
+```
+
+# Data Partition
+
+```{r}
+ set.seed(123456) 
+ 
+# Perform stratified sampling
+ split_data <- stratified(nasa_data, 
+                         group = "Hazardous", 
+                         size = 0.2,  # set for test 
+                         bothSets = TRUE ) 
+ # Extract train data
+ train_data <- split_data[[2]]
+ # Extract test data
+ test_data <- split_data[[1]]
+
+# Check size
+nrow(train_data)
+nrow(test_data)
+```
+
+# Trees 
+
+## Random Forest 
+
+```{r}
+set.seed(123456)
+rf1 <- randomForest(Hazardous ~., 
+                data = train_data,
+                ntree = 200, # Set number of trees
+                nodesize = 200)  # Set node size
+
+rf1_pred <- predict(rf1, test_data) # Create predictions 
+
+t_rf <- table(rf1_pred,test_data$Hazardous) # Create table
+rf_acc <- confusionMatrix(t_rf,  positive = "True") # Produce confusion matrix
+rf_acc
+```
+
+Random Forest generates very high accuracy at 99.47%, sensitivity at 98.01% and specificity at 99.75%.
+
+## XGBoost
+
+### Convert Data 
+
+```{r}
+# Create training matrix
+dtrain <- xgb.DMatrix(data = as.matrix(train_data[, 1:23]), label = as.numeric(train_data$Hazardous) -1)
+
+# Create test matrix
+dtest <- xgb.DMatrix(data = as.matrix(test_data[, 1:23]), label = as.numeric(test_data$Hazardous) - 1)
+```
+
+### Fit XGBoost Model
+
+```{r}
+set.seed(123456)
+bst_1 <- xgboost(data = dtrain, # Set training data
+               nrounds = 100, # Set number of rounds
+               verbose = 1, # 1 - Prints out fit
+               print_every_n = 20, # Prints out result every 20th iteration
+               objective = "binary:logistic", # Set objective
+               eval_metric = "auc",
+               eval_metric = "error") # Set evaluation metric to use
+
+# Prediction
+boost_preds_1 <- predict(bst_1, dtest) # Create predictions for xgboost model
+pred_dat <- cbind.data.frame(boost_preds_1 , test_data$Hazardous) # Issue
+# Convert predictions to classes, using optimal cut-off
+boost_pred_class <- rep("False", length(boost_preds_1))
+boost_pred_class[boost_preds_1 >= 0.5] <- "True"
+
+t_xgb <- table(boost_pred_class, test_data$Hazardous) # Create table
+xgb_acc <- confusionMatrix(t_xgb, positive = "True") # Produce confusion matrix
+xgb_acc
+```
+
+XGBoost generates accuracy at 99.57%, sensitivity at 98.68% and specificity at 99.75%.
+
+### Imbalanced Data
+
+```{r}
+summary(train_data$Hazardous) # Imbalanced Data
+zero_weight <- sum(train_data$Hazardous == 'False')/sum(train_data$Hazardous == 'True')
+
+set.seed(123456)
+bst_bal <- xgboost(data = dtrain, # Set training data
+              eta = 0.05, # Set learning rate
+              max.depth =  7, # Set max depth
+              min_child_weight = 10, # Set minimum number of samples in node to split
+              gamma = 0, # Set minimum loss reduction for split
+              subsample =  0.9, # Set proportion of training data to use in tree
+              colsample_bytree = 0.9, # Set number of variables to use in each tree
+               
+              nrounds = 200, # Set number of rounds
+              early_stopping_rounds = 20, # Set number of rounds to stop at if there is no improvement
+               
+              verbose = 1, # 1 - Prints out fit
+              nthread = 1, # Set number of parallel threads
+              print_every_n = 20, # Prints out result every 20th iteration
+              
+              scale_pos_weight = zero_weight, # Set weights
+              
+              objective = "binary:logistic", # Set objective
+              eval_metric = "auc",
+              eval_metric = "error") # Set evaluation metric to use
+
+# Prediction
+boost_preds_bal <- predict(bst_bal, dtest) # Create predictions for xgboost model
+pred_dat <- cbind.data.frame(boost_preds_bal , test_data$Hazardous) # Issue
+# Convert predictions to classes, using optimal cut-off
+boost_pred_class <- rep("False", length(boost_preds_bal))
+boost_pred_class[boost_preds_bal >= 0.5] <- "True"
+
+t_xgb_bal <- table(boost_pred_class, test_data$Hazardous) # Create table
+xgb_ba_acc <- confusionMatrix(t_xgb_bal, positive = "True") # Produce confusion matrix
+xgb_ba_acc
+```
+
+After adjusted the model for imbalanced data, the accuracy is at 99.15%, sensitivity at 99.34% and specificity at 99.11%., which doesn't differ too much.
+
+
+### Variable Importance
+
+```{r, message=FALSE}
+x_vars <- model.matrix(Hazardous ~., data = train_data)[,-1]
+
+shap_result <- shap.score.rank(xgb_model = bst_1, 
+                X_train =x_vars,
+                shap_approx = F)
+
+shap_long = shap.prep(shap = shap_result,
+                           X_train = x_vars, 
+                           top_n = 10)
+
+plot.shap.summary(data_long = shap_long)
+```
+
+Based on Shap calculation, `Absolute.Magnitude` and `Minimum.Orbit.Intersection` are quite important features. Let's try remove those two and run XGBoost again.
+
+```{r}
+# Set data again
+dtrain1 <- xgb.DMatrix(data = as.matrix(train_data[, c(2:9, 11:23)]), 
+                       label = as.numeric(train_data$Hazardous) -1)
+dtest1 <- xgb.DMatrix(data = as.matrix(test_data[, c(2:9, 11:23)]), 
+                     label = as.numeric(test_data$Hazardous) - 1)
+
+# Run Model
+set.seed(123456)
+bst_2 <- xgboost(data = dtrain1, # Set training data
+               nrounds = 100, # Set number of rounds
+               verbose = 1, # 1 - Prints out fit
+               print_every_n = 20, # Prints out result every 20th iteration
+               objective = "binary:logistic", # Set objective
+               eval_metric = "auc",
+               eval_metric = "error") # Set evaluation metric to use
+
+# Prediction
+boost_preds_2 <- predict(bst_2, dtest1) # Create predictions for xgboost model
+pred_dat <- cbind.data.frame(boost_preds_2 , test_data$Hazardous) # Issue
+# Convert predictions to classes, using optimal cut-off
+boost_pred_class <- rep("False", length(boost_preds_2))
+boost_pred_class[boost_preds_2 >= 0.5] <- "True"
+
+t_xgb_2 <- table(boost_pred_class, test_data$Hazardous) # Create table
+confusionMatrix(t_xgb_2, positive = "True") # Produce confusion matrix
+```
+
+Now, `bst_2` gives us the accuracy at 94.24%, sensitivity at 72.85% and specificity at 98.35%.
+
+```{r}
+shap_result <- shap.score.rank(xgb_model = bst_2, 
+                X_train =as.matrix(train_data[, c(2:9, 11:23)]),
+                shap_approx = F)
+
+shap_long = shap.prep(shap = shap_result,
+                           X_train = as.matrix(train_data[, c(2:9, 11:23)]), 
+                           top_n = 10)
+
+plot.shap.summary(data_long = shap_long)
+```
+
+# Logistic Regression
+
+## Fitting Logistic Regression
+
+```{r, warning=FALSE, message=FALSE}
+glm_full <- glm(Hazardous ~ ., data = train_data, family = 'binomial')
+
+# Variable Selection Using BIC Standard
+glm_bwd <- step(glm_full, direction = 'backward', k = log(nrow(nasa_data)))
+summary(glm_bwd)
+```
+
+## Apply LASSO
+
+```{r}
+x_vars <- as.data.frame(scale(nasa_data[, -24]))
+
+# Create sequence of lambda values
+lambda_seq <- seq(from = 0.1, to = 10, by = 0.1)
+# Run lasso cross validation
+glm_lasso_cv <- cv.glmnet(x = as.matrix(x_vars), # Set explanatory variables
+                   y = as.numeric(nasa_data$Hazardous), # Set response variable
+                   alpha = 1, # Set alpha as 1 for lasso
+                   lambda = lambda_seq, # Set lambda as sequence of lambda values
+                   nfolds = 10) # Set number of folds as 10
+
+best_lam <- glm_lasso_cv$lambda.1se # Extract best lambda
+best_lam # View best lambda
+
+glm_lasso <- glmnet(x = x_vars,
+                    y = nasa_data$Hazardous,
+                    alpha = 1, 
+                    family = "binomial", 
+                    lambda = best_lam)
+
+coef(glm_lasso)
+```
+
+## Model Evaluation
+
+```{r, warning=FALSE}
+glm_full_pred <- predict(glm_full, newdata = test_data, type = 'response')
+glm_bwd_pred <- predict(glm_bwd, newdata = test_data, type = 'response')
+
+glm_full_acc <- confusionMatrix(factor(ifelse(glm_full_pred > 0.5, 'True', 'False')), test_data$Hazardous, positive = 'True')
+print(glm_full_acc)
+
+glm_bwd_acc <- confusionMatrix(factor(ifelse(glm_bwd_pred > 0.5, 'True', 'False')), test_data$Hazardous, positive = 'True')
+print(glm_bwd_acc)
+```
+
+# Neural Network Model
+
+## Standardization
+```{r}
+# Scale train data
+x_train_nn <- model.matrix(~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. +
+                             Epoch.Date.Close.Approach + Relative.Velocity.km.per.hr +
+                             Miles.per.hour + Miss.Dist..Astronomical. + Orbit.ID +
+                             Orbit.Uncertainity + Minimum.Orbit.Intersection +
+                             Jupiter.Tisserand.Invariant + Epoch.Osculation + Eccentricity +
+                             Semi.Major.Axis + Inclination + Asc.Node.Longitude +
+                             Orbital.Period + Perihelion.Distance + Perihelion.Arg +
+                             Aphelion.Dist + Perihelion.Time + Mean.Anomaly + Mean.Motion,
+                           data = train_data)[,-1]
+  
+# standardization
+x_mean <- apply(x_train_nn, 2, mean)
+x_sd <- apply(x_train_nn, 2, sd)
+x_train_nn <- scale(x_train_nn, center = x_mean, scale = x_sd)
+
+# combine with dependent variable Outcome
+x_train_nn <- cbind.data.frame(train_data$Hazardous, x_train_nn)
+colnames(x_train_nn)[1] <- 'Hazardous'
+
+
+# Scale test data
+x_test_nn <- model.matrix(~ Absolute.Magnitude + Est.Dia.in.KM.min. + Est.Dia.in.KM.max. +
+                             Epoch.Date.Close.Approach + Relative.Velocity.km.per.hr +
+                             Miles.per.hour + Miss.Dist..Astronomical. + Orbit.ID +
+                             Orbit.Uncertainity + Minimum.Orbit.Intersection +
+                             Jupiter.Tisserand.Invariant + Epoch.Osculation + Eccentricity +
+                             Semi.Major.Axis + Inclination + Asc.Node.Longitude +
+                             Orbital.Period + Perihelion.Distance + Perihelion.Arg +
+                             Aphelion.Dist + Perihelion.Time + Mean.Anomaly + Mean.Motion,
+                           data = test_data)[,-1]
+
+x_test_nn <- scale(x_test_nn, center = x_mean, scale = x_sd)
+
+x_test_nn <- cbind.data.frame(test_data$Hazardous, x_test_nn)
+colnames(x_test_nn)[1] <- 'Hazardous'
+```
+
+## Neural Network Model Creation
+
+```{r, eval=FALSE}
+# Decide the number of hidden layer and neurons
+seq_1 <- seq(2, 10, 1)
+params <- expand.grid(seq_1, seq_1)
+accuracy_res <- rep(NA, nrow(params))
+for (i in 56:nrow(params)){
+  set.seed(123456)
+  model <- neuralnet(Hazardous == 'True' ~ ., data = x_train_nn,
+                     hidden = c(params[i,1],params[i,2]), linear.output = F)
+  
+  accuracy_res[i] <- confusionMatrix(factor(ifelse(predict(model, newdata = x_test_nn)[, 1] > 0.5, 'True', 'False')), test_data$Hazardous, positive = 'True')[3][[1]][['Accuracy']]
+  
+}
+
+accuracy_table <- cbind(params, accuracy_res)
+
+accuracy_table[which.max(accuracy_table$accuracy_res), ] # two layers with 5 neurons on 1st and 4 neurons on 2nd
+```
+
+```{r}
+set.seed(123456)
+nn1 <- neuralnet(Hazardous == 'True' ~ ., data = x_train_nn, hidden = c(5, 4), linear.output = F)
+nn1_pred <- predict(nn1, newdata = x_test_nn)[, 1]
+
+nn1_acc <- confusionMatrix(factor(ifelse(nn1_pred > 0.5, 'True', 'False')),
+                           test_data$Hazardous, positive = 'True')
+nn1_acc
+```
+
+# Model Comparison
+
+```{r, message=FALSE}
+# Compare Confusion Matrix
+
+# Check accuracy
+c(paste('XGBoost', round(xgb_acc[3]$overall[1],4), sep = ": "),
+  paste('glm_bwd', round(glm_bwd_acc[3]$overall[1],4), sep = ": "),
+  paste('nn', round(nn1_acc[3]$overall[1],4), sep = ": "))
+
+# Check Sensitivity
+c(paste('XGBoost', round(xgb_acc[4]$byClass[1],4), sep = ": "),
+  paste('glm_bwd', round(glm_bwd_acc[4]$byClass[1],4), sep = ": "),
+  paste('nn', round(nn1_acc[4]$byClass[1],4), sep = ": "))
+
+# Check Specificity
+c(paste('XGBoost', round(xgb_acc[4]$byClass[2],4), sep = ": "),
+  paste('glm_bwd', round(glm_bwd_acc[4]$byClass[2],4), sep = ": "),
+  paste('nn', round(nn1_acc[4]$byClass[2],4), sep = ": "))
+
+
+# Plot ROC
+
+# Calculate XGBoost ROC
+roc1 = roc(test_data$Hazardous, boost_preds_1)
+# Calculate Logistic Regression ROC
+roc2 = roc(test_data$Hazardous, glm_full_pred)
+# Calculate Neural Network ROC
+roc3 = roc(test_data$Hazardous, nn1_pred)
+
+plot.roc(roc1, print.auc = TRUE, print.auc.x = 0, print.auc.y = 0.4, col = "navy", print.auc.col = "navy")
+
+plot.roc(roc2, print.auc = TRUE, print.auc.x = 0, print.auc.y = 0.6, col = "green", print.auc.col = "green", add = TRUE)
+
+plot.roc(roc3, print.auc = TRUE, print.auc.x = 0, print.auc.y = 0.8, col = "orange", print.auc.col = "orange", add = TRUE)
+```
+

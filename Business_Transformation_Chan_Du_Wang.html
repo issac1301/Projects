@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Issac Chan, Eva Wang, and Bean Du">
+
+<title>Business Transformation for Cloud</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="Business_Transformation_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Business_Transformation_files/libs/quarto-html/quarto.js"></script>
+<script src="Business_Transformation_files/libs/quarto-html/popper.min.js"></script>
+<script src="Business_Transformation_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Business_Transformation_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Business_Transformation_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Business_Transformation_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Business_Transformation_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Business_Transformation_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Business_Transformation_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="Business_Transformation_files/libs/tabwid-1.1.0/tabwid.css" rel="stylesheet">
+<link href="Business_Transformation_files/libs/tabwid-1.1.0/scrool.css" rel="stylesheet">
+<script src="Business_Transformation_files/libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="Business_Transformation_files/libs/viz-1.8.2/viz.js"></script>
+<link href="Business_Transformation_files/libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+<script src="Business_Transformation_files/libs/grViz-binding-1.0.9/grViz.js"></script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#business-transformation-for-cloud" id="toc-business-transformation-for-cloud" class="nav-link active" data-scroll-target="#business-transformation-for-cloud">Business Transformation for Cloud</a></li>
+  <li><a href="#codes" id="toc-codes" class="nav-link" data-scroll-target="#codes">Codes</a>
+  <ul class="collapse">
+  <li><a href="#stocking-shelves" id="toc-stocking-shelves" class="nav-link" data-scroll-target="#stocking-shelves">Stocking Shelves</a></li>
+  <li><a href="#moving-product" id="toc-moving-product" class="nav-link" data-scroll-target="#moving-product">Moving Product</a></li>
+  <li><a href="#from-sales-to-scales" id="toc-from-sales-to-scales" class="nav-link" data-scroll-target="#from-sales-to-scales">From Sales to Scales</a></li>
+  <li><a href="#return-on-investment" id="toc-return-on-investment" class="nav-link" data-scroll-target="#return-on-investment">Return On Investment</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Business Transformation for Cloud</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Issac Chan, Eva Wang, and Bean Du </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="business-transformation-for-cloud" class="level1">
+<h1>Business Transformation for Cloud</h1>
+<p>In general, we recommend Cloud conduct vertical integration from dispensary operations to production. This is not an easy transformation and we would love to support Cloud during this process. As we mentioned in the presentation, there are many risks that Cloud should pay attention to and we would love to help them.</p>
+<p>For this project, what we learned is two-folded. From the technical perspective, we practiced linear optimization, process simulation, and cost simulation. We revisited the need to adjust units in bvec and Amat for linear optimization. For process simulation, we learned the use of at() in add_generator to make the process start at 0 and act for 1 time. And for the final ROI, we learned about the triangle distribution and how to use it to generate random variables.</p>
+<p>On the business side, the project gives us a peak into how to use analytics to solve business problems and how to gather business insight from analytics. For example, the code for Stocking Shelves is straightforward, but the business interpretation needs some more thinking. Pre-rolls have the lowest price and lowest demand, yet our code suggests us to invest predominantly in pre-rolls. As we think back to what we coded, this result is restricted by both the budget and market demand. Thus, the results show a combined effect of contribution margin and the market demand, which makes pre-rolls our top choice. Despite the low-demand, pre-rolls have the second highest contribution margin at $7/unit. Perhaps, with more marketing, the demand for pre-rolls could rise.</p>
+<hr>
+</section>
+<section id="codes" class="level1">
+<h1>Codes</h1>
+<p>The Cloud Cannabis Company (Cloud) operates 4 dispensaries within Michigan, with a 5th opening soon in Detroit. Like most business in this space, they are faced with intense competition and an ever-growing consumer base.</p>
+<section id="stocking-shelves" class="level2">
+<h2 class="anchored" data-anchor-id="stocking-shelves">Stocking Shelves</h2>
+<p>Across the 4 current locations, Cloud offers product categories such as flower, pre-rolls, concentrates, and edibles.</p>
+<p>For each of these products, average prices (retail), costs (Cloud’s acquisition cost), and demand are listed below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">product =</span> <span class="fu">c</span>(<span class="st">"flower (3.5 grams)"</span>, <span class="st">"pre-rolls (1 gram)"</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"concentrates (1 gram)"</span>, <span class="st">"edibles (100 mg)"</span>), </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">price =</span> <span class="fu">c</span>(<span class="dv">45</span>, <span class="dv">12</span>, <span class="dv">60</span>, <span class="dv">15</span>), </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">cost =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">5</span>, <span class="dv">50</span>, <span class="dv">10</span>), </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">demand =</span> <span class="fu">c</span>(<span class="dv">37</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">28</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  flextable<span class="sc">::</span><span class="fu">flextable</span>(<span class="at">cwidth =</span> <span class="fl">2.5</span>, <span class="at">cheight =</span> .<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="tabwid"><style>.cl-ad9aed94{}.cl-ad920d1e{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-ad95e84e{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-ad95e858{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-ad95ff28{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ad95ff32{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ad95ff33{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ad95ff3c{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ad95ff3d{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ad95ff3e{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-ad9aed94"><thead><tr style="overflow-wrap:break-word;"><td class="cl-ad95ff28"><p class="cl-ad95e84e"><span class="cl-ad920d1e">product</span></p></td><td class="cl-ad95ff32"><p class="cl-ad95e858"><span class="cl-ad920d1e">price</span></p></td><td class="cl-ad95ff32"><p class="cl-ad95e858"><span class="cl-ad920d1e">cost</span></p></td><td class="cl-ad95ff32"><p class="cl-ad95e858"><span class="cl-ad920d1e">demand</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-ad95ff33"><p class="cl-ad95e84e"><span class="cl-ad920d1e">flower (3.5 grams)</span></p></td><td class="cl-ad95ff3c"><p class="cl-ad95e858"><span class="cl-ad920d1e">45</span></p></td><td class="cl-ad95ff3c"><p class="cl-ad95e858"><span class="cl-ad920d1e">25</span></p></td><td class="cl-ad95ff3c"><p class="cl-ad95e858"><span class="cl-ad920d1e">37</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-ad95ff33"><p class="cl-ad95e84e"><span class="cl-ad920d1e">pre-rolls (1 gram)</span></p></td><td class="cl-ad95ff3c"><p class="cl-ad95e858"><span class="cl-ad920d1e">12</span></p></td><td class="cl-ad95ff3c"><p class="cl-ad95e858"><span class="cl-ad920d1e">5</span></p></td><td class="cl-ad95ff3c"><p class="cl-ad95e858"><span class="cl-ad920d1e">15</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-ad95ff33"><p class="cl-ad95e84e"><span class="cl-ad920d1e">concentrates (1 gram)</span></p></td><td class="cl-ad95ff3c"><p class="cl-ad95e858"><span class="cl-ad920d1e">60</span></p></td><td class="cl-ad95ff3c"><p class="cl-ad95e858"><span class="cl-ad920d1e">50</span></p></td><td class="cl-ad95ff3c"><p class="cl-ad95e858"><span class="cl-ad920d1e">20</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-ad95ff3d"><p class="cl-ad95e84e"><span class="cl-ad920d1e">edibles (100 mg)</span></p></td><td class="cl-ad95ff3e"><p class="cl-ad95e858"><span class="cl-ad920d1e">15</span></p></td><td class="cl-ad95ff3e"><p class="cl-ad95e858"><span class="cl-ad920d1e">10</span></p></td><td class="cl-ad95ff3e"><p class="cl-ad95e858"><span class="cl-ad920d1e">28</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+<p>Demand is an approximation of the percentage of sales for each product type. ¬ Cloud’s annual product budget is 850,000 dollars. Given the demand needs, how should Cloud allocate their budget over the product types to maximize revenue?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cvec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'flower'</span> <span class="ot">=</span> <span class="dv">45</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>          <span class="st">'pre-rolls'</span> <span class="ot">=</span> <span class="dv">12</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">'concentrates'</span> <span class="ot">=</span> <span class="dv">60</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>          <span class="st">'edibles'</span> <span class="ot">=</span> <span class="dv">15</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>bvec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">850000</span>, <span class="dv">850000</span><span class="sc">*</span>.<span class="dv">37</span>, <span class="dv">850000</span><span class="sc">*</span>.<span class="dv">15</span>, <span class="dv">850000</span><span class="sc">*</span>.<span class="dv">20</span>, <span class="dv">850000</span><span class="sc">*</span>.<span class="dv">28</span>)  <span class="co">#needs to be the same unit</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>Amat <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">5</span>, <span class="dv">50</span>, <span class="dv">10</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">0</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">10</span>))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>product_strategy <span class="ot">&lt;-</span> linprog<span class="sc">::</span><span class="fu">solveLP</span>(cvec, bvec, Amat, <span class="cn">TRUE</span>, <span class="fu">c</span>(<span class="st">'&lt;='</span>, <span class="fu">rep</span>(<span class="st">'=='</span>, <span class="dv">4</span>)), <span class="at">lpSolve =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>product_strategy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Results of Linear Programming / Linear Optimization
+(using lpSolve)
+
+Objective function (Maximum): 1433100 
+
+Solution
+               opt
+flower       12580
+pre-rolls    25500
+concentrates  3400
+edibles      23800
+
+Constraints
+  actual dir   bvec free
+1 850000  &lt;= 850000    0
+2 314500  == 314500    0
+3 127500  == 127500    0
+4 170000  == 170000    0
+5 238000  == 238000    0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(product_strategy<span class="sc">$</span>solution)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      flower    pre-rolls concentrates      edibles 
+  0.19270833   0.39062500   0.05208333   0.36458333 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>product <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Category =</span> <span class="fu">c</span>(<span class="st">'Flower'</span>, <span class="st">'Pre-rolls'</span>, <span class="st">'Concentrates'</span>, <span class="st">'Edibles'</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">Quantity =</span> <span class="fu">c</span>(<span class="dv">12580</span>, <span class="dv">25500</span>, <span class="dv">3400</span>, <span class="dv">23800</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(product, <span class="fu">aes</span>(<span class="at">x =</span> Category, <span class="at">y =</span> Quantity)) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Quantity), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>), </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),   </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.major.y =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"whitesmoke"</span>),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.minor.y =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"whitesmoke"</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.major.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"whitesmoke"</span>),</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.minor.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"whitesmoke"</span>))  <span class="sc">+</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">30000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Business_Transformation_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="moving-product" class="level2">
+<h2 class="anchored" data-anchor-id="moving-product">Moving Product</h2>
+<p>Currently, Cloud receives products from the following companies: Better Provisioning (Kalamazoo), Harbor Farmz (Kalamazoo), Hazy Farms (Detroit), and Rare Michigan Genetics (Kalamazoo). Due to different locations, each company has slightly different flat shipping rates to each of the 4 current locations:</p>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">company =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Better Provisioning"</span>, <span class="dv">4</span>), </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">rep</span>(<span class="st">"Harbor Farmz"</span>, <span class="dv">4</span>), </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">rep</span>(<span class="st">"Hazy Farms"</span>, <span class="dv">4</span>), </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">rep</span>(<span class="st">"Rare Michigan Genetics"</span>, <span class="dv">4</span>)), </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">store =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Ann Arbor"</span>, <span class="st">"Muskegon"</span>, <span class="st">"Utica"</span>, <span class="st">"Traverse City"</span>), <span class="dv">4</span>), </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">cost =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">20</span>, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">10</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">20</span>, </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">25</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">10</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">20</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  flextable<span class="sc">::</span><span class="fu">flextable</span>(<span class="at">cwidth =</span> <span class="fl">2.5</span>, <span class="at">cheight =</span> .<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="tabwid"><style>.cl-af77662e{}.cl-af6ae7fa{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-af70776a{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-af707774{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-af709eac{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af709eb6{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af709ec0{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af709eca{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af709ecb{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af709ed4{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-af77662e"><thead><tr style="overflow-wrap:break-word;"><td class="cl-af709eac"><p class="cl-af70776a"><span class="cl-af6ae7fa">company</span></p></td><td class="cl-af709eac"><p class="cl-af70776a"><span class="cl-af6ae7fa">store</span></p></td><td class="cl-af709eb6"><p class="cl-af707774"><span class="cl-af6ae7fa">cost</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Better Provisioning</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Ann Arbor</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">10</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Better Provisioning</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Muskegon</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">8</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Better Provisioning</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Utica</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">12</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Better Provisioning</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Traverse City</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">20</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Harbor Farmz</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Ann Arbor</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">10</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Harbor Farmz</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Muskegon</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">8</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Harbor Farmz</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Utica</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">12</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Harbor Farmz</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Traverse City</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">20</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Hazy Farms</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Ann Arbor</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">5</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Hazy Farms</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Muskegon</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">10</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Hazy Farms</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Utica</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">5</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Hazy Farms</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Traverse City</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">25</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Rare Michigan Genetics</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Ann Arbor</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">10</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Rare Michigan Genetics</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Muskegon</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">8</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Rare Michigan Genetics</span></p></td><td class="cl-af709ec0"><p class="cl-af70776a"><span class="cl-af6ae7fa">Utica</span></p></td><td class="cl-af709eca"><p class="cl-af707774"><span class="cl-af6ae7fa">12</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af709ecb"><p class="cl-af70776a"><span class="cl-af6ae7fa">Rare Michigan Genetics</span></p></td><td class="cl-af709ecb"><p class="cl-af70776a"><span class="cl-af6ae7fa">Traverse City</span></p></td><td class="cl-af709ed4"><p class="cl-af707774"><span class="cl-af6ae7fa">20</span></p></td></tr></tbody></table></div>
+</div>
+<p>In addition to the shipping costs to each location, each store has needed flower product and each grower only has so much product. Those values are listed below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">company =</span> <span class="fu">c</span>(<span class="st">"Better Provisioning"</span>, <span class="st">"Harbor Farmz"</span>,  </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Hazy Farms"</span>, <span class="st">"Rare Michigan Genetics"</span>),  </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">supply =</span> <span class="fu">c</span>(<span class="dv">700</span>, <span class="dv">300</span>, <span class="dv">550</span>, <span class="dv">420</span>), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">store =</span> <span class="fu">c</span>(<span class="st">"Ann Arbor"</span>, <span class="st">"Muskegon"</span>, <span class="st">"Utica"</span>, <span class="st">"Traverse City"</span>), </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">demand =</span> <span class="fu">c</span>(<span class="dv">650</span>, <span class="dv">200</span>, <span class="dv">450</span>, <span class="dv">250</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  flextable<span class="sc">::</span><span class="fu">flextable</span>(<span class="at">cwidth =</span> <span class="fl">2.5</span>, <span class="at">cheight =</span> .<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="tabwid"><style>.cl-af8e86d8{}.cl-af849452{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-af88e692{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-af88e69c{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-af88fba0{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af88fbaa{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af88fbab{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af88fbb4{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af88fbbe{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-af88fbbf{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-af8e86d8"><thead><tr style="overflow-wrap:break-word;"><td class="cl-af88fba0"><p class="cl-af88e692"><span class="cl-af849452">company</span></p></td><td class="cl-af88fbaa"><p class="cl-af88e69c"><span class="cl-af849452">supply</span></p></td><td class="cl-af88fba0"><p class="cl-af88e692"><span class="cl-af849452">store</span></p></td><td class="cl-af88fbaa"><p class="cl-af88e69c"><span class="cl-af849452">demand</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-af88fbab"><p class="cl-af88e692"><span class="cl-af849452">Better Provisioning</span></p></td><td class="cl-af88fbb4"><p class="cl-af88e69c"><span class="cl-af849452">700</span></p></td><td class="cl-af88fbab"><p class="cl-af88e692"><span class="cl-af849452">Ann Arbor</span></p></td><td class="cl-af88fbb4"><p class="cl-af88e69c"><span class="cl-af849452">650</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af88fbab"><p class="cl-af88e692"><span class="cl-af849452">Harbor Farmz</span></p></td><td class="cl-af88fbb4"><p class="cl-af88e69c"><span class="cl-af849452">300</span></p></td><td class="cl-af88fbab"><p class="cl-af88e692"><span class="cl-af849452">Muskegon</span></p></td><td class="cl-af88fbb4"><p class="cl-af88e69c"><span class="cl-af849452">200</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af88fbab"><p class="cl-af88e692"><span class="cl-af849452">Hazy Farms</span></p></td><td class="cl-af88fbb4"><p class="cl-af88e69c"><span class="cl-af849452">550</span></p></td><td class="cl-af88fbab"><p class="cl-af88e692"><span class="cl-af849452">Utica</span></p></td><td class="cl-af88fbb4"><p class="cl-af88e69c"><span class="cl-af849452">450</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-af88fbbe"><p class="cl-af88e692"><span class="cl-af849452">Rare Michigan Genetics</span></p></td><td class="cl-af88fbbf"><p class="cl-af88e69c"><span class="cl-af849452">420</span></p></td><td class="cl-af88fbbe"><p class="cl-af88e692"><span class="cl-af849452">Traverse City</span></p></td><td class="cl-af88fbbf"><p class="cl-af88e69c"><span class="cl-af849452">250</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DiagrammeR)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>cost <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">costA_E =</span> <span class="dv">10</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">costA_F =</span> <span class="dv">8</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">costA_G =</span> <span class="dv">12</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">costA_H =</span> <span class="dv">20</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">costB_E =</span> <span class="dv">10</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">costB_F =</span> <span class="dv">8</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">costB_G =</span> <span class="dv">12</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">costB_H =</span> <span class="dv">20</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">costC_E =</span> <span class="dv">5</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">costC_F =</span> <span class="dv">10</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">costC_G =</span> <span class="dv">5</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">costC_H =</span> <span class="dv">25</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">costD_E =</span> <span class="dv">10</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">costD_F =</span> <span class="dv">8</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">costD_G =</span> <span class="dv">12</span>,</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">costD_H =</span> <span class="dv">20</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>supply_demand <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">700</span>, <span class="dv">300</span>, <span class="dv">550</span>, <span class="dv">420</span>, <span class="dv">650</span>, <span class="dv">200</span>, <span class="dv">450</span>, <span class="dv">250</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>supply_chain <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">nodeA =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nodeB =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nodeC =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nodeD =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nodeE =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nodeF =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nodeG =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nodeH =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>con_dir <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"&lt;="</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">"&gt;="</span>, <span class="dv">4</span>))</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> linprog<span class="sc">::</span><span class="fu">solveLP</span>(<span class="at">cvec =</span> cost, <span class="at">bvec =</span> supply_demand, <span class="at">Amat =</span> supply_chain, <span class="at">const.dir =</span> con_dir, <span class="at">maximum =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>opt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14850</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>solution[result<span class="sc">$</span>solution<span class="sc">!=</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>costA_E costB_H costC_E costC_G costD_F 
+    550     250     100     450     200 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grViz</span>(<span class="st">"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="st">digraph {</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="st">  graph [overlap = true, fontsize = 5, rankdir = LR]</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="st">  node [shape = box,</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="st">        fontname = Helvetica]</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="st">  A; B; C; D</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="st">  node [shape = oval,</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="st">        fixedsize = true,</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="st">        width = 1.5] // sets as oval</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="st">  E; F; G; H</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="st">  node [shape = box, style = filled, color = black, fillcolor = aliceblue]</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="st">  A [label = 'Better Provisioning']</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="st">  B [label = 'Harbor Farmz']</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="st">  C [label = 'Hazy Farms']</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="st">  D [label = 'Rare Michigan Genetics']</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="st">  E [label = 'Ann Arbor']</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="st">  F [label = 'Muskegon']</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="st">  G [label = 'Utica']</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="st">  H [label = 'Traverse City']</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="st">  A-&gt;E [label = '550']</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="st">  B-&gt;H [label = '250']</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="st">  C-&gt;E [label = '100']</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="st">  C-&gt;G [label = '450']</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="st">  D-&gt;F [label = '200']</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="htmlwidget-8821173bac835bf2270b" style="width:100%;height:464px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8821173bac835bf2270b">{"x":{"diagram":"\ndigraph {\n  graph [overlap = true, fontsize = 5, rankdir = LR]\n\n  node [shape = box,\n        fontname = Helvetica]\n  A; B; C; D\n\n  node [shape = oval,\n        fixedsize = true,\n        width = 1.5] // sets as oval\n  E; F; G; H\n  \n  node [shape = box, style = filled, color = black, fillcolor = aliceblue]\n  A [label = \"Better Provisioning\"]\n  B [label = \"Harbor Farmz\"]\n  C [label = \"Hazy Farms\"]\n  D [label = \"Rare Michigan Genetics\"]\n  E [label = \"Ann Arbor\"]\n  F [label = \"Muskegon\"]\n  G [label = \"Utica\"]\n  H [label = \"Traverse City\"]\n\n  A->E [label = \"550\"]\n  B->H [label = \"250\"]\n  C->E [label = \"100\"]\n  C->G [label = \"450\"]\n  D->F [label = \"200\"]\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="from-sales-to-scales" class="level2">
+<h2 class="anchored" data-anchor-id="from-sales-to-scales">From Sales to Scales</h2>
+<p>As with most dispensaries, Cloud is contemplating a leap into the production space. Unfortunately, it is not without a fair amount of risk. The risk is not about money (although the automation involved is costly), but about time. Generally, the following products get created from a plant: flower and concentrates.</p>
+<p>From start to finish, the process to produce flower is as follows:</p>
+<ol type="1">
+<li><p>Flowering stage (min: 8 weeks; max: 11 weeks)</p></li>
+<li><p>Drying stage (min: 7 days; max: 10 days)</p></li>
+<li><p>Trimming stage (mu = 1 hour; sigma = 15 minutes)</p></li>
+<li><p>Curing stage (min: 1 month; max: 4 months)</p></li>
+</ol>
+<p>From start to finish, the process to produce concentrates is as follows:</p>
+<ol type="1">
+<li><p>Flowering stage (min: 8 weeks; max: 11 weeks)</p></li>
+<li><p>Drying stage (min: 7 days; max: 10 days)</p></li>
+<li><p>Freeze stage (20 minutes)</p></li>
+<li><p>Extraction stage (mu: 15 minutes; sigma: 2 minutes)</p></li>
+<li><p>Filtration stage (mu: 1 hour; sigma: 8 minutes)</p></li>
+<li><p>Solvent evaporation stage (1 hour)</p></li>
+<li><p>Decarbonization stage (mu: 2 days; sigma: 8 hours)</p></li>
+<li><p>Distillation stage (mu: 18 hours; sigma 2 hours)</p></li>
+</ol>
+<p>About 45% of a given grow goes toward flower, while the remaining 55% goes towards concentrates. How long should Cloud anticipate a first grow taking?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simmer)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># time unit in hours: 1d = 24h, 1w = 168h (7*24), 1mos = 720h (30*24, assume 30 days per month)</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map_df</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="sc">~</span>{</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>production <span class="ot">&lt;-</span> <span class="fu">trajectory</span>(<span class="st">"produce"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">seize</span>(<span class="st">"flowering"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">8</span><span class="sc">*</span><span class="dv">168</span>, <span class="dv">11</span><span class="sc">*</span><span class="dv">168</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">release</span>(<span class="st">"flowering"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">seize</span>(<span class="st">"drying"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">7</span><span class="sc">*</span><span class="dv">24</span>, <span class="dv">10</span><span class="sc">*</span><span class="dv">24</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">release</span>(<span class="st">"drying"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">branch</span>(<span class="cf">function</span>() <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.45</span>, <span class="fl">0.55</span>)), <span class="at">continue =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">TRUE</span>),</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>          <span class="fu">trajectory</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>            <span class="fu">seize</span>(<span class="st">"trimming"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>            <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">15</span><span class="sc">/</span><span class="dv">60</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">release</span>(<span class="st">"trimming"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>            <span class="fu">seize</span>(<span class="st">"curing"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>            <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">720</span>, <span class="dv">4</span><span class="sc">*</span><span class="dv">720</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>            <span class="fu">release</span>(<span class="st">"curing"</span>),</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>          <span class="fu">trajectory</span>() <span class="sc">%&gt;%</span>  </span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>            <span class="fu">seize</span>(<span class="st">"freeze"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>            <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">20</span><span class="sc">/</span><span class="dv">60</span>, <span class="dv">20</span><span class="sc">/</span><span class="dv">60</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>            <span class="fu">release</span>(<span class="st">"freeze"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>            <span class="fu">seize</span>(<span class="st">"extraction"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>            <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">15</span><span class="sc">/</span><span class="dv">60</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">60</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>            <span class="fu">release</span>(<span class="st">"extraction"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>            <span class="fu">seize</span>(<span class="st">"filtration"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>            <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">8</span><span class="sc">/</span><span class="dv">60</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>            <span class="fu">release</span>(<span class="st">"filtration"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>            <span class="fu">seize</span>(<span class="st">"solvent"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>            <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>            <span class="fu">release</span>(<span class="st">"solvent"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>            <span class="fu">seize</span>(<span class="st">"decarbonization"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>            <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">2</span><span class="sc">*</span><span class="dv">24</span>, <span class="dv">8</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>            <span class="fu">release</span>(<span class="st">"decarbonization"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>            <span class="fu">seize</span>(<span class="st">"distillation"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>            <span class="fu">timeout</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">18</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>            <span class="fu">release</span>(<span class="st">"distillation"</span>)</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">simmer</span>(<span class="st">"results"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"flowering"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"drying"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"trimming"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"curing"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"freeze"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"extraction"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"filtration"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"solvent"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"decarbonization"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="st">"distillation"</span>, <span class="at">capacity =</span> <span class="dv">1</span>, <span class="at">queue_size =</span> <span class="cn">Inf</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_generator</span>(<span class="st">"output_"</span>, production, <span class="fu">at</span>(<span class="dv">0</span>)) <span class="co">#start at 0 and get 1 case</span></span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>simmer<span class="sc">::</span><span class="fu">run</span>(results)</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">get_mon_arrivals</span>(results)</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>output})</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x<span class="sc">$</span>activity_time)   <span class="co"># answer in hours</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2601.019</code></pre>
+</div>
+</div>
+</section>
+<section id="return-on-investment" class="level2">
+<h2 class="anchored" data-anchor-id="return-on-investment">Return On Investment</h2>
+<p>The cost to start plant production is high. The following table offers a break down of some yearly costs for a 10,000 square foot greenhouse:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">item =</span> <span class="fu">c</span>(<span class="st">"Rent"</span>, <span class="st">"Lighting"</span>, <span class="st">"Climate Control"</span>, </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Irrigation"</span>, <span class="st">"Consumables"</span>),  </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">low =</span> <span class="fu">c</span>(<span class="dv">100000</span>, <span class="dv">5000</span>, <span class="dv">10000</span>, <span class="dv">2500</span>, <span class="dv">25000</span>), </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">mid =</span> <span class="fu">c</span>(<span class="dv">150000</span>, <span class="dv">10000</span>, <span class="dv">15000</span>, <span class="dv">3000</span>, <span class="dv">50000</span>), </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">high =</span> <span class="fu">c</span>(<span class="dv">300000</span>, <span class="dv">20000</span>, <span class="dv">17000</span>, <span class="dv">5000</span>, <span class="dv">75000</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  flextable<span class="sc">::</span><span class="fu">flextable</span>(<span class="at">cwidth =</span> <span class="fl">2.5</span>, <span class="at">cheight =</span> .<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="tabwid"><style>.cl-bad89808{}.cl-bad13126{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-bad4c016{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-bad4c020{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-bad4d45c{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bad4d466{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bad4d470{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bad4d47a{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bad4d47b{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bad4d47c{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-bad89808"><thead><tr style="overflow-wrap:break-word;"><td class="cl-bad4d45c"><p class="cl-bad4c016"><span class="cl-bad13126">item</span></p></td><td class="cl-bad4d466"><p class="cl-bad4c020"><span class="cl-bad13126">low</span></p></td><td class="cl-bad4d466"><p class="cl-bad4c020"><span class="cl-bad13126">mid</span></p></td><td class="cl-bad4d466"><p class="cl-bad4c020"><span class="cl-bad13126">high</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-bad4d470"><p class="cl-bad4c016"><span class="cl-bad13126">Rent</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">100,000</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">150,000</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">300,000</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-bad4d470"><p class="cl-bad4c016"><span class="cl-bad13126">Lighting</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">5,000</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">10,000</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">20,000</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-bad4d470"><p class="cl-bad4c016"><span class="cl-bad13126">Climate Control</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">10,000</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">15,000</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">17,000</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-bad4d470"><p class="cl-bad4c016"><span class="cl-bad13126">Irrigation</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">2,500</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">3,000</span></p></td><td class="cl-bad4d47a"><p class="cl-bad4c020"><span class="cl-bad13126">5,000</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-bad4d47b"><p class="cl-bad4c016"><span class="cl-bad13126">Consumables</span></p></td><td class="cl-bad4d47c"><p class="cl-bad4c020"><span class="cl-bad13126">25,000</span></p></td><td class="cl-bad4d47c"><p class="cl-bad4c020"><span class="cl-bad13126">50,000</span></p></td><td class="cl-bad4d47c"><p class="cl-bad4c020"><span class="cl-bad13126">75,000</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+<p>A high-functioning greenhouse can churn out an average of 1,400 pounds of dried product per year. However, a great number of things can happen: power failures, pests, poor yield. While the average might be 1,400 pounds, there is some variance around that (roughly 300 pounds as a standard deviation). If 1,400 pounds will return a gross profit of 1,000,000 dollars, how much would Cloud likely make over the next 5 years?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EnvStats)  <span class="co"># for triangle distribution</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreach)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gganimate)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simmer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">item =</span> <span class="fu">c</span>(<span class="st">"Rent"</span>, <span class="st">"Lighting"</span>, <span class="st">"Climate Control"</span>, </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Irrigation"</span>, <span class="st">"Consumables"</span>),  </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">low =</span> <span class="fu">c</span>(<span class="dv">100000</span>, <span class="dv">5000</span>, <span class="dv">10000</span>, <span class="dv">2500</span>, <span class="dv">25000</span>), </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">mid =</span> <span class="fu">c</span>(<span class="dv">150000</span>, <span class="dv">10000</span>, <span class="dv">15000</span>, <span class="dv">3000</span>, <span class="dv">50000</span>), </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">high =</span> <span class="fu">c</span>(<span class="dv">300000</span>, <span class="dv">20000</span>, <span class="dv">17000</span>, <span class="dv">5000</span>, <span class="dv">75000</span>))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># To get the unit price: </span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># if we assume high-cost investment will generate high-functioning greenhouse and thus</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># yield on average 1400 pounds of output, then we can use this to calculate the unit</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># price</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># high_cost &lt;- sum(data$high)</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>unit_price <span class="ot">&lt;-</span> <span class="dv">1000000</span><span class="sc">/</span><span class="dv">1400</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>five_year_stats <span class="ot">&lt;-</span><span class="fu">future_map_dfr</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100000</span>, <span class="sc">~</span>{</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="co"># total cost based on triangle distribution</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  summary_statistics <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map_df</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="sc">~</span>{</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    rent <span class="ot">&lt;-</span> <span class="fu">rtri</span>(<span class="dv">1</span>, data[<span class="dv">1</span>, <span class="dv">2</span>], data[<span class="dv">1</span>,<span class="dv">4</span>], data[<span class="dv">1</span>,<span class="dv">3</span>]) <span class="co"># we don't know mode, thus use mid to be the mode</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    lighting <span class="ot">&lt;-</span> <span class="fu">rtri</span>(<span class="dv">1</span>, data[<span class="dv">2</span>,<span class="dv">2</span>], data[<span class="dv">2</span>,<span class="dv">4</span>], data[<span class="dv">2</span>,<span class="dv">3</span>])</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    climate <span class="ot">&lt;-</span> <span class="fu">rtri</span>(<span class="dv">1</span>, data[<span class="dv">3</span>,<span class="dv">2</span>], data[<span class="dv">3</span>,<span class="dv">4</span>], data[<span class="dv">3</span>,<span class="dv">3</span>])</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    irrigation <span class="ot">&lt;-</span> <span class="fu">rtri</span>(<span class="dv">1</span>, data[<span class="dv">4</span>,<span class="dv">2</span>], data[<span class="dv">4</span>,<span class="dv">4</span>], data[<span class="dv">4</span>,<span class="dv">3</span>])</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    consumable <span class="ot">&lt;-</span> <span class="fu">rtri</span>(<span class="dv">1</span>, data[<span class="dv">5</span>,<span class="dv">2</span>], data[<span class="dv">5</span>,<span class="dv">4</span>], data[<span class="dv">5</span>,<span class="dv">3</span>])</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    cost <span class="ot">&lt;-</span> rent <span class="sc">+</span> lighting <span class="sc">+</span> climate <span class="sc">+</span> irrigation <span class="sc">+</span> consumable</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Output</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>    output <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">1400</span>, <span class="dv">300</span>)</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Assume that our client will not change their unit price, regardless of their investment</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Profit  </span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>    revenue <span class="ot">&lt;-</span> output <span class="sc">*</span> unit_price</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>    profit <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(revenue <span class="sc">-</span> cost)</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Year =</span> <span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">5</span>),</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>               <span class="at">Cost =</span> cost,</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>               <span class="at">Revenue =</span> revenue,</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>               <span class="at">Profit =</span> profit,</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>               <span class="at">ROI =</span> profit<span class="sc">/</span>cost)</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">Total_Cost =</span> <span class="fu">sum</span>(summary_statistics<span class="sc">$</span>Cost),</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>             <span class="at">Total_Revenue =</span> <span class="fu">sum</span>(summary_statistics<span class="sc">$</span>Revenue),</span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>             <span class="at">Total_Profit =</span> <span class="fu">sum</span>(summary_statistics<span class="sc">$</span>Profit),</span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>             <span class="at">ROI =</span> <span class="fu">sum</span>(summary_statistics<span class="sc">$</span>Profit)<span class="sc">/</span><span class="fu">sum</span>(summary_statistics<span class="sc">$</span>Cost))</span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(five_year_stats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Total_Cost      Total_Revenue       Total_Profit           ROI       
+ Min.   :4913344   Min.   :14662526   Min.   : 7787576   Min.   :1.049  
+ 1st Qu.:6217941   1st Qu.:23387287   1st Qu.:16791817   1st Qu.:2.507  
+ Median :6548447   Median :24997282   Median :18438245   Median :2.813  
+ Mean   :6562011   Mean   :24996689   Mean   :18434678   Mean   :2.831  
+ 3rd Qu.:6890694   3rd Qu.:26594852   3rd Qu.:20074627   3rd Qu.:3.136  
+ Max.   :8712258   Max.   :36101922   Max.   :29913143   Max.   :4.983  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(<span class="st">"default"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
